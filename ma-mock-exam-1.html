@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock Exam 1 — Attempt Review · TYMBAFlex</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --ink:#111111;
+    --paper:#F4EEDD;
+    --card:#FFFFFF;
+    --red:#E63B2E;
+    --blue:#1D3FA0;
+    --yellow:#F5C518;
+    --green:#2E8B4F;
+    --green-deep:#1F6B39;
+    --grey:#777777;
+    --line:4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle, rgba(17,17,17,0.06) 1px, transparent 1px);
+    background-size: 18px 18px;
+    color:var(--ink);
+    font-family: ui-monospace,"JetBrains Mono","Space Mono",Menlo,Consolas,monospace;
+    padding-bottom:80px;
+  }
+  h1,h2,h3,h4,.display{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    text-transform:uppercase;
+    letter-spacing:-0.02em;
+    margin:0;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Top marquee ===== */
+  .topbar{
+    background:var(--ink);
+    color:var(--paper);
+    border-bottom:var(--line) solid var(--ink);
+    padding:8px 0;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .marquee{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    animation: scroll-left 22s linear infinite;
+  }
+  @keyframes scroll-left{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+
+  /* ===== Header ===== */
+  header.hero{
+    padding:28px 0 18px;
+  }
+  .brandmark{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .mark{position:relative;width:34px;height:34px;flex:0 0 auto;}
+  .mark-circle{position:absolute;left:0;top:0;width:19px;height:19px;border-radius:50%;background:var(--red);border:2px solid var(--ink);}
+  .mark-tri{position:absolute;left:12px;top:8px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:17px solid var(--blue);}
+  .mark-square{position:absolute;left:19px;top:0;width:14px;height:14px;background:var(--yellow);border:2px solid var(--ink);}
+  .brand-name{font-size:13px;font-weight:800;letter-spacing:0.06em;}
+  .brand-name span{color:var(--red);}
+
+  h1.title{font-size:clamp(28px,6vw,46px);line-height:0.95;}
+  .subtitle{
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--grey);
+    margin-top:8px;
+  }
+
+  /* ===== Panel base (brutalist card) ===== */
+  .panel{
+    background:var(--card);
+    border:var(--line) solid var(--ink);
+    box-shadow:8px 8px 0 0 var(--ink);
+  }
+
+  /* ===== Stats dashboard ===== */
+  .dash{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+  }
+  .stat{
+    border-right:var(--line) solid var(--ink);
+    padding:14px 12px;
+    background:var(--card);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;font-size:30px;line-height:1;}
+  .stat .lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--grey);margin-top:4px;}
+  .stat.correct .num{color:var(--green-deep);}
+  .stat.incorrect .num{color:var(--red);}
+  .stat.xp .num{color:var(--blue);}
+  @media (max-width:600px){
+    .dash{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .stat:nth-child(1),.stat:nth-child(2){border-bottom:var(--line) solid var(--ink);}
+  }
+
+  /* ===== Progress bars ===== */
+  .progress-block{margin-top:16px;padding:16px;}
+  .progress-row{margin-bottom:14px;}
+  .progress-row:last-child{margin-bottom:0;}
+  .progress-label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;
+    margin-bottom:6px;
+  }
+  .progress-label .val{font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;font-size:14px;letter-spacing:0;}
+  .track{
+    height:20px;
+    border:3px solid var(--ink);
+    background:repeating-linear-gradient(45deg,#00000008,#00000008 6px,transparent 6px,transparent 12px), #fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .fill{
+    height:100%;
+    width:0%;
+    transition:width 0.5s cubic-bezier(.2,.9,.3,1.2);
+    position:relative;
+  }
+  .fill.exam{background:repeating-linear-gradient(135deg,var(--green),var(--green) 10px,var(--green-deep) 10px,var(--green-deep) 20px);}
+  .fill.review{background:repeating-linear-gradient(135deg,var(--blue),var(--blue) 10px,#13297a 10px,#13297a 20px);}
+
+  /* ===== Filter tabs ===== */
+  .filters{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    flex-wrap:wrap;
+  }
+  .filter-btn{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:12px;
+    letter-spacing:0.03em;
+    padding:9px 16px;
+    border:3px solid var(--ink);
+    background:var(--card);
+    cursor:pointer;
+    box-shadow:4px 4px 0 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease;
+    color:var(--ink);
+  }
+  .filter-btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 0 var(--ink);}
+  .filter-btn:active,.filter-btn.active{
+    transform:translate(4px,4px);
+    box-shadow:0 0 0 0 var(--ink);
+  }
+  .filter-btn.active{background:var(--yellow);}
+  .filter-btn .count{opacity:.6;font-size:10px;margin-left:4px;}
+
+  /* ===== Question list ===== */
+  .qlist{margin-top:22px;display:flex;flex-direction:column;gap:16px;}
+
+  .qcard{
+    background:var(--card);
+    border:var(--line) solid var(--ink);
+    box-shadow:7px 7px 0 0 var(--ink);
+    scroll-margin-top:16px;
+  }
+  .qcard.hidden{display:none;}
+
+  .qhead{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    user-select:none;
+    border-bottom:var(--line) solid transparent;
+  }
+  .qcard.open .qhead{border-bottom-color:var(--ink);}
+
+  .qno-badge{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:15px;
+    width:38px;height:38px;
+    flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--ink);
+    background:var(--paper);
+  }
+  .qcard.correct .qno-badge{background:var(--green);color:#fff;}
+  .qcard.incorrect .qno-badge{background:var(--red);color:#fff;}
+
+  .qhead-mid{flex:1;min-width:0;}
+  .qhead-snippet{
+    font-size:12.5px;
+    font-weight:600;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+  }
+  .qhead-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;}
+
+  .stamp{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:9.5px;
+    letter-spacing:0.05em;
+    padding:2px 7px;
+    border:2px solid currentColor;
+    text-transform:uppercase;
+    display:inline-block;
+  }
+  .stamp.correct{color:var(--green-deep);}
+  .stamp.incorrect{color:var(--red);}
+  .stamp.xp{color:var(--ink);background:var(--yellow);border-color:var(--ink);}
+  .stamp.reviewed{color:#fff;background:var(--blue);border-color:var(--blue);}
+
+  .chevron{
+    flex:0 0 auto;
+    width:26px;height:26px;
+    border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:900;
+    transition:transform .2s ease;
+  }
+  .qcard.open .chevron{transform:rotate(45deg);}
+
+  .qbody{display:none;padding:0 16px 20px;}
+  .qcard.open .qbody{display:block;}
+
+  .qtext{font-size:13.5px;line-height:1.55;margin-top:14px;}
+  .qtext p{margin:0 0 10px;}
+  .qtext table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px;}
+  .qtext table td{border:2px solid var(--ink);padding:5px 8px;}
+  .qtext table td:last-child{text-align:right;}
+
+  .opts{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:10px;
+    border:2.5px solid var(--ink);
+    padding:9px 11px;
+    font-size:12.5px;
+    background:#fff;
+  }
+  .opt-mark{
+    flex:0 0 auto;width:20px;height:20px;
+    border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:900;
+    margin-top:1px;
+  }
+  .opt.chosen-correct{background:#EAF7EE;border-color:var(--green-deep);}
+  .opt.chosen-correct .opt-mark{background:var(--green);color:#fff;border-color:var(--green-deep);}
+  .opt.chosen-wrong{background:#FDECEA;border-color:var(--red);}
+  .opt.chosen-wrong .opt-mark{background:var(--red);color:#fff;border-color:var(--red);}
+  .opt.right-unchosen{background:#EAF7EE;border-style:dashed;border-color:var(--green-deep);}
+  .opt.right-unchosen .opt-mark{background:#fff;color:var(--green-deep);}
+  .opt.plain .opt-mark{background:#fff;color:transparent;}
+  .opt p{margin:0;}
+
+  .compare{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  @media (max-width:520px){.compare{grid-template-columns:1fr;}}
+  .compare .box{
+    border:3px solid var(--ink);
+    padding:10px 11px;
+  }
+  .compare .box.wrong{background:#FDECEA;border-color:var(--red);}
+  .compare .box.right{background:#EAF7EE;border-color:var(--green-deep);}
+  .compare .box .box-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+  .compare .box.wrong .box-lbl{color:var(--red);}
+  .compare .box.right .box-lbl{color:var(--green-deep);}
+  .compare .box p{margin:0;font-size:12.5px;}
+
+  .debrief{
+    margin-top:16px;
+    border:3px solid var(--ink);
+    background:#FFFDF5;
+    position:relative;
+  }
+  .debrief::before{
+    content:"";
+    position:absolute;top:-9px;left:18px;
+    width:34px;height:16px;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    transform:rotate(-3deg);
+  }
+  .debrief-head{
+    padding:12px 14px 4px;
+    font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+    display:flex;align-items:center;gap:8px;
+    color:var(--ink);
+  }
+  .debrief-head .pin{width:8px;height:8px;border-radius:50%;background:var(--red);border:1px solid var(--ink);}
+  .debrief-body{padding:6px 14px 14px;font-size:13px;line-height:1.6;}
+  .debrief-body p{margin:0 0 10px;}
+  .debrief-body p:last-child{margin-bottom:0;}
+  .debrief-body strong{background:linear-gradient(transparent 60%, var(--yellow) 60%);}
+
+  .note-tag{
+    display:inline-block;
+    font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--grey);
+    margin-top:10px;
+  }
+
+  .qfooter{
+    margin-top:16px;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:10px;
+  }
+  .review-btn{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:11.5px;
+    padding:9px 14px;
+    border:3px solid var(--ink);
+    background:var(--yellow);
+    cursor:pointer;
+    box-shadow:4px 4px 0 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
+  }
+  .review-btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 0 var(--ink);}
+  .review-btn:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--ink);}
+  .review-btn.done{
+    background:var(--blue);color:#fff;cursor:default;
+    box-shadow:4px 4px 0 0 var(--ink);
+    transform:none;
+  }
+  .review-btn.done:hover{transform:none;box-shadow:4px 4px 0 0 var(--ink);}
+
+  .xp-earned{font-size:11px;font-weight:800;color:var(--green-deep);}
+
+  /* ===== Toast ===== */
+  #toast{
+    position:fixed;left:50%;bottom:24px;transform:translate(-50%,120%);
+    background:var(--ink);color:var(--yellow);
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:13px;letter-spacing:.03em;
+    padding:12px 20px;
+    border:3px solid var(--ink);
+    box-shadow:6px 6px 0 0 var(--red);
+    transition:transform .35s cubic-bezier(.2,.9,.3,1.2);
+    z-index:50;
+    white-space:nowrap;
+  }
+  #toast.show{transform:translate(-50%,0);}
+
+  /* ===== Footer ===== */
+  footer{
+    margin-top:34px;
+    padding:20px 16px 4px;
+    text-align:center;
+    font-size:10.5px;
+    color:var(--grey);
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+
+  .empty-state{
+    padding:40px 16px;text-align:center;
+    font-size:12px;font-weight:700;color:var(--grey);
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="marquee" id="marquee"></div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="brandmark">
+      <div class="mark"><img src="logo.png" alt="logo" style="width:100%;height:100%;object-fit:contain;"></div>
+      <div class="brand-name">TYMBA<span>FLEX</span> · CORRECTIONS ENGINE</div>
+    </div>
+    <h1 class="title">Mock Exam 1<br>Attempt Review</h1>
+    <div class="subtitle">50 questions · deferred feedback · debrief mode</div>
+  </header>
+
+  <div class="dash panel">
+    <div class="stat correct"><div class="num" id="statCorrect">0</div><div class="lbl">Correct</div></div>
+    <div class="stat incorrect"><div class="num" id="statIncorrect">0</div><div class="lbl">Incorrect</div></div>
+    <div class="stat"><div class="num" id="statPct">0%</div><div class="lbl">Score</div></div>
+    <div class="stat xp"><div class="num" id="statXP">0</div><div class="lbl">Total XP</div></div>
+  </div>
+
+  <div class="progress-block panel" style="margin-top:14px;">
+    <div class="progress-row">
+      <div class="progress-label"><span>Exam Score</span><span class="val" id="examScoreLabel">0 / 100 XP</span></div>
+      <div class="track"><div class="fill exam" id="examFill"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Debrief Progress (review every miss to bank bonus XP)</span><span class="val" id="reviewLabel">0 / 0</span></div>
+      <div class="track"><div class="fill review" id="reviewFill"></div></div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All <span class="count" id="cAll"></span></button>
+    <button class="filter-btn" data-filter="incorrect">Needs Debrief <span class="count" id="cIncorrect"></span></button>
+    <button class="filter-btn" data-filter="correct">Correct <span class="count" id="cCorrect"></span></button>
+    <button class="filter-btn" data-filter="unreviewed">Not Yet Reviewed <span class="count" id="cUnreviewed"></span></button>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">
+    <div style="font-size:9.5px;font-weight:800;color:var(--grey);text-transform:uppercase;letter-spacing:.05em;">&#128190; Progress saves automatically to this browser</div>
+    <button id="resetProgress" style="font-family:ui-monospace,monospace;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:none;border:2px solid var(--grey);color:var(--grey);padding:4px 9px;cursor:pointer;">Reset Progress</button>
+  </div>
+
+  <div class="qlist" id="qlist"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">No questions match this filter.</div>
+
+  <footer>TYMBAFlex &middot; Corrections Engine &middot; Keep grinding, the exam doesn't grade effort but your memory does.</footer>
+</div>
+
+<div id="toast"></div>
+
+<script id="qdata" type="application/json">[{"qno": 1, "is_correct": true, "qtext": "Direct operatives in a factory are paid on a time rate basis for a 35-hour week.\n\nIf productivity can be improved what will happen to direct labour costs per unit of output?", "options": [{"text": "No change", "checked": false}, {"text": "Decrease", "checked": true}, {"text": "Not possible to determine from the information provided", "checked": false}, {"text": "Increase", "checked": false}], "your_answer": "Decrease", "correct_answer": "Decrease", "debrief": "", "fb_is_custom": false}, {"qno": 2, "is_correct": true, "qtext": "Which of the following options shows three key purposes of management accounting?", "options": [{"text": "Planning, negotiation and resourcing", "checked": false}, {"text": "Publication, control and decision making", "checked": false}, {"text": "Decision making, negotiating and resourcing", "checked": false}, {"text": "Planning, control and decision making", "checked": true}], "your_answer": "Planning, control and decision making", "correct_answer": "Planning, control and decision making", "debrief": "", "fb_is_custom": false}, {"qno": 3, "is_correct": true, "qtext": "<p>An extract from the list of accounts of a car manufacturer are as follows.</p>\n<p>Cost codes: Direct materials: 1000\u20131999</p>\n<p>Indirect materials: 2000\u20132999</p>\n<p>Direct labour: 3000\u20133999</p>\n<p>Indirect labour: 4000\u20134999</p>\n<p>Which of the following items is coded INCORRECTLY?</p>", "options": [{"text": "<p>Cleaning material 1786</p>", "checked": true}, {"text": "<p>Wages of stores supervisor 4252</p>", "checked": false}, {"text": "<p>Car engines 1536</p>", "checked": false}, {"text": "<p>Wages of canteen staff 4131</p>", "checked": false}], "your_answer": "<p>Cleaning material 1786</p>", "correct_answer": "Cleaning material 1786", "debrief": "", "fb_is_custom": false}, {"qno": 4, "is_correct": true, "qtext": "Why is it important for an accounting coding system to be 'Self-Checking'?", "options": [{"text": "So that the system can automatically calculate the company's profit", "checked": false}, {"text": "To ensure that if an invalid code is entered, the system can reject it automatically.", "checked": true}, {"text": "To prevent the same code from being used by two different companies", "checked": false}, {"text": "So that employees don't have to be trained on how to use it.", "checked": false}], "your_answer": "To ensure that if an invalid code is entered, the system can reject it automatically.", "correct_answer": "To ensure that if an invalid code is entered, the system can reject it automatically.", "debrief": "", "fb_is_custom": false}, {"qno": 5, "is_correct": true, "qtext": "<p>Which of the following statements about predetermined overhead absorption rates are true?</p>\n<p>1. Using a predetermined absorption rate avoids fluctuations in unit costs caused by abnormally high or low overhead expenditure or activity levels.</p>\n<p>2. Using a predetermined absorption rate offers the administrative convenience of being able to record full production costs sooner.</p>\n<p>3. Using a predetermined absorption rate avoids problems of under/over absorption of overheads because a constant overhead rate is available.</p>", "options": [{"text": "<p>All of them</p>", "checked": false}, {"text": "<p>1 and 2 only</p>", "checked": true}, {"text": "<p>1 and 3 only</p>", "checked": false}, {"text": "<p>2 and 3 only</p>", "checked": false}], "your_answer": "<p>1 and 2 only</p>", "correct_answer": "1 and 2 only", "debrief": "", "fb_is_custom": false}, {"qno": 6, "is_correct": true, "qtext": "Which of the following statements is NOT true about Excel spreadsheets?", "options": [{"text": "Spreadsheets can be used to perform what if analysis", "checked": false}, {"text": "If a cell displays ####, then the cell is not wide enough to display the full contents", "checked": false}, {"text": "Changing a value in cell C5 will automatically update cells with formulae referring to C5", "checked": false}, {"text": "Default printing options include printing gridlines", "checked": true}], "your_answer": "Default printing options include printing gridlines", "correct_answer": "Default printing options include printing gridlines", "debrief": "", "fb_is_custom": false}, {"qno": 7, "is_correct": true, "qtext": "In December, the output from Process 1 was 360 units. There was a normal loss of 20%.\n\nHow many units were input into Process 1 in December?", "options": [{"text": "450 units", "checked": true}, {"text": "360 units", "checked": false}, {"text": "300 units", "checked": false}, {"text": "432 units", "checked": false}], "your_answer": "450 units", "correct_answer": "450 units", "debrief": "", "fb_is_custom": false}, {"qno": 8, "is_correct": true, "qtext": "Which of the following would be classed as indirect labour?", "options": [{"text": "Plumbers in a construction company", "checked": false}, {"text": "A senior consultant in a firm of management consultants", "checked": false}, {"text": "Machine operators in a company manufacturing washing machines", "checked": false}, {"text": "A stores assistant in a factory store", "checked": true}], "your_answer": "A stores assistant in a factory store", "correct_answer": "A stores assistant in a factory store", "debrief": "", "fb_is_custom": false}, {"qno": 9, "is_correct": true, "qtext": "Which of the following would be data rather than information?", "options": [{"text": "Salesman's commission as a percentage of total sales", "checked": false}, {"text": "Total sales value per day", "checked": true}, {"text": "Total sales per product as a percentage of total sales", "checked": false}, {"text": "Sales increase/decrease per product in the month", "checked": false}], "your_answer": "Total sales value per day", "correct_answer": "Total sales value per day", "debrief": "", "fb_is_custom": false}, {"qno": 10, "is_correct": false, "qtext": "<p>Employee H works a basic 37-hour week and is employed on product manufacture. He is paid at a rate of $11 per hour for the basic hours with a premium of 30% for any overtime hours. Employee H worked 5 overtime hours in Week 7 to satisfy sales demand.</p>\n<p>What amount, out of the total gross wages for Employee H in Week 7, should be charged as direct labour cost?</p>", "options": [{"text": "<p>$478.50</p>", "checked": false}, {"text": "<p>$407.00</p>", "checked": true}, {"text": "<p>$423.50</p>", "checked": false}, {"text": "<p>$462.00</p>", "checked": false}], "your_answer": "<p>$407.00</p>", "correct_answer": "$462.00", "debrief": "<p>The 5 overtime hours were worked to <strong>satisfy general sales demand</strong> \u2014 not at the request of a specific customer. Under standard costing rules, overtime premium is only charged as a <strong>direct</strong> cost when it relates to a specific customer's instruction; otherwise the premium is treated as a <strong>production overhead</strong>.</p><p>However, the <em>hours themselves</em> are still direct labour, because Employee H was working on product manufacture throughout. So the direct labour cost is the <strong>basic rate applied to all hours worked</strong>: 42 hours &times; $11 = <strong>$462.00</strong>.</p><p>The trap answer $407.00 comes from only counting the 37 contracted basic hours (37 &times; $11 = $407) and dropping the 5 overtime hours out of the direct cost altogether. That's wrong \u2014 only the <em>overtime premium</em> (5 &times; $11 &times; 30% = $16.50) gets reclassified as overhead, not the base pay for those hours.</p>", "fb_is_custom": true}, {"qno": 11, "is_correct": true, "qtext": "Which of the following is NOT normally a function of a purchasing department?", "options": [{"text": "Ensuring only authorised purchases are made", "checked": false}, {"text": "Negotiating prices with suppliers", "checked": false}, {"text": "Recording goods received into inventory", "checked": true}, {"text": "Raising purchase orders", "checked": false}], "your_answer": "Recording goods received into inventory", "correct_answer": "Recording goods received into inventory", "debrief": "", "fb_is_custom": false}, {"qno": 12, "is_correct": true, "qtext": "How would facts and figures that have been processed, analysed and communicated to another party be properly described?", "options": [{"text": "Information", "checked": true}, {"text": "Both information and data", "checked": false}, {"text": "Neither Information nor data", "checked": false}, {"text": "Data", "checked": false}], "your_answer": "Information", "correct_answer": "Information", "debrief": "", "fb_is_custom": false}, {"qno": 13, "is_correct": true, "qtext": "What would be the most appropriate basis for apportioning the insurance costs of plant and machinery to departments within a factory?", "options": [{"text": "Floor space (m\u00b2) occupied by each department", "checked": false}, {"text": "Value of machines in each department", "checked": true}, {"text": "Number of employees in each department", "checked": false}, {"text": "Number of machines in each department", "checked": false}], "your_answer": "Value of machines in each department", "correct_answer": "Value of machines in each department", "debrief": "", "fb_is_custom": false}, {"qno": 14, "is_correct": true, "qtext": "Why is the process of cost apportionment carried out?", "options": [{"text": "Cost units gather overheads as they pass through cost centres", "checked": false}, {"text": "Common costs are shared among cost centres", "checked": true}, {"text": "Costs may be controlled", "checked": false}, {"text": "Whole items of cost can be charged to cost centres", "checked": false}], "your_answer": "Common costs are shared among cost centres", "correct_answer": "Common costs are shared among cost centres", "debrief": "", "fb_is_custom": false}, {"qno": 15, "is_correct": true, "qtext": "Which of the following options is NOT a number format available in Excel?", "options": [{"text": "Accounting", "checked": false}, {"text": "General", "checked": false}, {"text": "Fixed", "checked": true}, {"text": "Currency", "checked": false}], "your_answer": "Fixed", "correct_answer": "Fixed", "debrief": "", "fb_is_custom": false}, {"qno": 16, "is_correct": true, "qtext": "<p>The inventory record for Component C2 for a month shows:</p>\n<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image.png\"/></p>\n<p>The periodic weighted average method is used to price the issue of materials. Each average price is rounded to the nearest $0.01. What is the cost of the issue in the month?</p>", "options": [{"text": "<p>$2,079.30</p>", "checked": false}, {"text": "<p>$2,070.60</p>", "checked": false}, {"text": "<p>$2,056.68</p>", "checked": true}, {"text": "<p>$2,034.06</p>", "checked": false}], "your_answer": "<p>$2,056.68</p>", "correct_answer": "$2,056.68", "debrief": "", "fb_is_custom": false}, {"qno": 17, "is_correct": true, "qtext": "Which of the following should be used to check purchase invoices against?", "options": [{"text": "Purchase requisition and delivery note", "checked": false}, {"text": "Advice note and delivery note", "checked": false}, {"text": "Purchase order and delivery note", "checked": true}, {"text": "Delivery note and order form", "checked": false}], "your_answer": "Purchase order and delivery note", "correct_answer": "Purchase order and delivery note", "debrief": "", "fb_is_custom": false}, {"qno": 18, "is_correct": false, "qtext": "<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image(1).png\"/></p>\n<p>What is the direct wages cost for department 1 in June?</p>", "options": [{"text": "<p>$34,685</p>", "checked": false}, {"text": "<p>$30,625</p>", "checked": false}, {"text": "<p>$25,185</p>", "checked": false}, {"text": "<p>$36,065</p>", "checked": true}], "your_answer": "<p>$36,065</p>", "correct_answer": "$30,625", "debrief": "<p>This question relies on figures shown in an image (a departmental wages analysis) that isn't reproduced in this review, so the exact build-up of $30,625 can't be shown here \u2014 but the principle to apply is the same one tested throughout this paper:</p><p><strong>Direct wages cost for a department</strong> = the wages of that department's <em>direct</em> production workers only, valued at their basic rate for hours worked <strong>plus</strong> any overtime premium that relates specifically to that department's own customer-driven overtime (general overtime premium is excluded and treated as an overhead instead).</p><p>Go back to the wage analysis table for this question and re-total only the direct labour lines for Department 1, checking carefully whether any overtime premium included in your total should actually be stripped out as an overhead cost.</p>", "fb_is_custom": true}, {"qno": 19, "is_correct": false, "qtext": "For which of the following would a production line manager be responsible?", "options": [{"text": "Labour hours worked and raw material prices", "checked": false}, {"text": "Labour hours worked and raw material usage", "checked": false}, {"text": "Labour rates and raw material usage", "checked": true}, {"text": "Labour rates and raw material prices", "checked": false}], "your_answer": "Labour rates and raw material usage", "correct_answer": "Labour hours worked and raw material usage", "debrief": "<p>A production line manager's day-to-day responsibility is <strong>operational</strong> \u2014 controlling the physical <em>quantities</em> used and the <em>time</em> taken, i.e. labour hours worked and raw material usage.</p><p><strong>Rates and prices</strong> (labour rates, raw material prices) are usually set centrally \u2014 labour rates through HR/union negotiation, and material prices through the purchasing department \u2014 so they sit outside a production line manager's control.</p><p>A good rule of thumb for responsibility accounting: managers should only be held accountable for figures they can actually influence. A line manager influences <em>how much</em> is used, not <em>what it costs per unit</em>.</p>", "fb_is_custom": true}, {"qno": 20, "is_correct": true, "qtext": "A telephone bill has been received with a line rental of $25 per month, and a charge per call of 5 cents.\n\nWhich is the best description of this telephone cost?", "options": [{"text": "A variable cost", "checked": false}, {"text": "A stepped-fixed cost", "checked": false}, {"text": "A mixed cost", "checked": true}, {"text": "A fixed cost", "checked": false}], "your_answer": "A mixed cost", "correct_answer": "A mixed cost", "debrief": "", "fb_is_custom": false}, {"qno": 21, "is_correct": true, "qtext": "Which of the following is NOT a purpose of a job card?", "options": [{"text": "Ensuring time is recorded accurately", "checked": false}, {"text": "Providing information on the whereabouts of employees", "checked": true}, {"text": "Authorising overtime payments", "checked": false}, {"text": "Assisting coding of labour costs", "checked": false}], "your_answer": "Providing information on the whereabouts of employees", "correct_answer": "Providing information on the whereabouts of employees", "debrief": "", "fb_is_custom": false}, {"qno": 22, "is_correct": true, "qtext": "<p>When deciding on an appropriate channel or format for communication, which factor(s) should be considered?</p>\n<p>1. Cost</p>\n<p>2. Speed of delivery</p>\n<p>3. Complexity</p>\n<p>4. Number of recipients</p>", "options": [{"text": "<p>1, 2, 3 and 4</p>", "checked": true}, {"text": "<p>2 and 4 only</p>", "checked": false}, {"text": "<p>1 only</p>", "checked": false}, {"text": "<p>3 and 4 only</p>", "checked": false}], "your_answer": "<p>1, 2, 3 and 4</p>", "correct_answer": "1, 2, 3 and 4", "debrief": "", "fb_is_custom": false}, {"qno": 23, "is_correct": true, "qtext": "What type of cost is a production supervisor salary, where one supervisor is needed for every ten production workers?", "options": [{"text": "Semi-variable cost", "checked": false}, {"text": "Fixed cost", "checked": false}, {"text": "Stepped fixed cost", "checked": true}, {"text": "Variable cost", "checked": false}], "your_answer": "Stepped fixed cost", "correct_answer": "Stepped fixed cost", "debrief": "", "fb_is_custom": false}, {"qno": 24, "is_correct": true, "qtext": "Which of the following options is NOT a reason for having policies for an organisation?", "options": [{"text": "To record health and safety procedures", "checked": false}, {"text": "To help new employees understand policies and procedures", "checked": false}, {"text": "To eliminate thought and flexibility", "checked": true}, {"text": "To set out authorisation policies", "checked": false}], "your_answer": "To eliminate thought and flexibility", "correct_answer": "To eliminate thought and flexibility", "debrief": "", "fb_is_custom": false}, {"qno": 25, "is_correct": true, "qtext": "Which of the following is NOT true of good management information?", "options": [{"text": "Must be cost-effective", "checked": false}, {"text": "Must be relevant", "checked": false}, {"text": "Must be computerised", "checked": true}, {"text": "Must be as accurate as required for its purpose", "checked": false}], "your_answer": "Must be computerised", "correct_answer": "Must be computerised", "debrief": "", "fb_is_custom": false}, {"qno": 26, "is_correct": true, "qtext": "<p>The following is a graph of cost against level of activity.</p>\n<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image(2).png\"/></p>\n<p>To which of the following costs does the graph correspond?</p>", "options": [{"text": "<p>Telephone bills made up of a standing charge and a variable charge</p>", "checked": true}, {"text": "<p>Bulk discounts on purchases, the discount being given on all units purchased</p>", "checked": false}, {"text": "<p>Salesman's commissions payable per unit up to a maximum amount of commission</p>", "checked": false}, {"text": "<p>Bonus payment to employees when production reaches a certain level</p>", "checked": false}], "your_answer": "<p>Telephone bills made up of a standing charge and a variable charge</p>", "correct_answer": "Telephone bills made up of a standing charge and a variable charge", "debrief": "", "fb_is_custom": false}, {"qno": 27, "is_correct": true, "qtext": "<p>The following information is contained in a spreadsheet.</p>\n<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image(3).png\"/></p>\n<p>A trainee accountant wants to produce a bar chart containing the sales tax and gross sales price information. Which range of cells needs to be selected to do this?</p>", "options": [{"text": "<p>B4:C6</p>", "checked": false}, {"text": "<p>C4:D4</p>", "checked": false}, {"text": "<p>C4:D6</p>", "checked": true}, {"text": "<p>B4:D6</p>", "checked": false}], "your_answer": "<p>C4:D6</p>", "correct_answer": "C4:D6", "debrief": "", "fb_is_custom": false}, {"qno": 28, "is_correct": true, "qtext": "Which of the following documents contains details of a payment being made?", "options": [{"text": "Remittance advice", "checked": true}, {"text": "Delivery note", "checked": false}, {"text": "Despatch note", "checked": false}, {"text": "Sales invoice", "checked": false}], "your_answer": "Remittance advice", "correct_answer": "Remittance advice", "debrief": "", "fb_is_custom": false}, {"qno": 29, "is_correct": true, "qtext": "Which of the following statements concerning the difference between management accounts and financial accounts is incorrect?", "options": [{"text": "Management accounts are often required for individual divisions and/or products whereas financial accounts usually cover the whole company", "checked": false}, {"text": "Management accounts are mainly for internal purposes whereas financial accounts are mainly for external purposes", "checked": false}, {"text": "There is a legal requirement for management accounts", "checked": true}, {"text": "Financial accounts are governed by strict accounting rules and regulations, management accounts are not", "checked": false}], "your_answer": "There is a legal requirement for management accounts", "correct_answer": "There is a legal requirement for management accounts", "debrief": "", "fb_is_custom": false}, {"qno": 30, "is_correct": true, "qtext": "A manager has responsibility for costs incurred, revenues earned and investment in non-current assets in one area of a business.\n\nWhat is the manager responsible for?", "options": [{"text": "An investment centre", "checked": true}, {"text": "A profit centre", "checked": false}, {"text": "A cost centre", "checked": false}, {"text": "A revenue centre", "checked": false}], "your_answer": "An investment centre", "correct_answer": "An investment centre", "debrief": "", "fb_is_custom": false}, {"qno": 31, "is_correct": true, "qtext": "<p>A company has 3,050 litres of a raw material in inventory. It has a further 2,275 litres on order from its supplier. 750 litres will be needed for a special job that has already been agreed with the customer.</p>\n<p>What is the free inventory?</p>", "options": [{"text": "<p>6,075 litres</p>", "checked": false}, {"text": "<p>1,525 litres</p>", "checked": false}, {"text": "<p>3,050 litres</p>", "checked": false}, {"text": "<p>4,575 litres</p>", "checked": true}], "your_answer": "<p>4,575 litres</p>", "correct_answer": "4,575 litres", "debrief": "", "fb_is_custom": false}, {"qno": 32, "is_correct": false, "qtext": "<p>A factory employs 25 direct production workers and 10 indirect staff. The standard working week is 40 hours. All staff are paid at the basic rate of $8 per hour with overtime paid at time and a half.</p>\n<p>Last week all employees worked for 45 hours to meet general production requirements.\u00a0</p>\n<p>What is the direct labour charge for the week?</p>", "options": [{"text": "<p>$9,000</p>", "checked": false}, {"text": "<p>$320</p>", "checked": false}, {"text": "<p>$8,000</p>", "checked": true}, {"text": "<p>$9,500</p>", "checked": false}], "your_answer": "<p>$8,000</p>", "correct_answer": "$9,000", "debrief": "<p>All 45 hours were worked to meet <strong>general production requirements</strong> (not a specific customer order), so \u2014 exactly as in Q10 \u2014 the direct labour charge includes the <strong>basic rate for every hour worked</strong>, while only the overtime <em>premium</em> is treated as an overhead.</p><p>Direct labour charge = 25 direct workers &times; 45 hours &times; $8 = <strong>$9,000</strong>.</p><p>The trap answer $8,000 comes from only costing the standard 40-hour week (25 &times; 40 &times; $8 = $8,000) and excluding the overtime hours from direct cost entirely. That's incorrect: the hours themselves are still direct production time; it's only the extra 50% premium that gets reclassified as overhead.</p><p>Also note: the 10 indirect staff are irrelevant here \u2014 their wages are never a direct labour cost regardless of hours worked.</p>", "fb_is_custom": true}, {"qno": 33, "is_correct": true, "qtext": "A manufacturing company operates a piecework wage system. Each employee is paid $6.00 per unit for the first 30 units they produce each week and $7.00 per unit for units in excess of this amount. There are 50 employees.  \n\nAssuming each employee produces 37 units per week, what is the total unit labour cost?", "options": [{"text": "$6.00", "checked": false}, {"text": "$6.05", "checked": false}, {"text": "$7.00", "checked": false}, {"text": "$6.19", "checked": true}], "your_answer": "$6.19", "correct_answer": "$6.19", "debrief": "", "fb_is_custom": false}, {"qno": 34, "is_correct": true, "qtext": "Each finished unit of Product X contains 1.4 litres of Material Y. 10% of material Y used is lost in processing. Sales and production of Product X in a period were 21,000 and 20,200 units respectively.  \n\nWhat was the usage of Material Y in the period?", "options": [{"text": "28,280 litres", "checked": false}, {"text": "31,422 litres", "checked": true}, {"text": "31,108 litres", "checked": false}, {"text": "32,667 litres", "checked": false}], "your_answer": "31,422 litres", "correct_answer": "31,422 litres", "debrief": "", "fb_is_custom": false}, {"qno": 35, "is_correct": true, "qtext": "Which of the following statements does NOT apply to real time systems?", "options": [{"text": "Continually changing data is received", "checked": false}, {"text": "Updates are via batch processing", "checked": true}, {"text": "Online input, queries and processing are possible", "checked": false}, {"text": "Output can be simultaneous with input", "checked": false}], "your_answer": "Updates are via batch processing", "correct_answer": "Updates are via batch processing", "debrief": "", "fb_is_custom": false}, {"qno": 36, "is_correct": true, "qtext": "Which of the following is internal information within a purchasing function or department?", "options": [{"text": "Purchase requisitions", "checked": true}, {"text": "Supplier's price list", "checked": false}, {"text": "Delivery notes", "checked": false}, {"text": "Purchase invoices", "checked": false}], "your_answer": "Purchase requisitions", "correct_answer": "Purchase requisitions", "debrief": "", "fb_is_custom": false}, {"qno": 37, "is_correct": true, "qtext": "Which of the following is used to record the movement of materials out of stores?", "options": [{"text": "Purchase order", "checked": false}, {"text": "Quotation", "checked": false}, {"text": "Purchase requisition", "checked": false}, {"text": "Materials requisition", "checked": true}], "your_answer": "Materials requisition", "correct_answer": "Materials requisition", "debrief": "", "fb_is_custom": false}, {"qno": 38, "is_correct": true, "qtext": "Which of the following are the elements of gross pay?", "options": [{"text": "Cash paid to employees", "checked": false}, {"text": "Cash paid to employees plus income tax plus employee's benefit contribution", "checked": true}, {"text": "Cash paid to employees plus income tax plus employer's benefit contribution", "checked": false}, {"text": "Cash paid to employees plus income tax plus employee's and employer's benefit contribution", "checked": false}], "your_answer": "Cash paid to employees plus income tax plus employee's benefit contribution", "correct_answer": "Cash paid to employees plus income tax plus employee's benefit contribution", "debrief": "", "fb_is_custom": false}, {"qno": 39, "is_correct": true, "qtext": "<p>Bloomsbury Co sells men's clothes through three different stores in London. Bloomsbury use a seven-character account coding convention - comprising the three-digit store location, followed by underscore, followed by the three-digit product type. An extract from Bloomsbury's coding list shows the following:</p>\n<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image(4).png\"/></p>\n<p>Which of the following is the code for sales of trousers at Holborn?</p>", "options": [{"text": "<p>110_003</p>", "checked": true}, {"text": "<p>130_003</p>", "checked": false}, {"text": "<p>120_003</p>", "checked": false}, {"text": "<p>110_001</p>", "checked": false}], "your_answer": "<p>110_003</p>", "correct_answer": "110_003", "debrief": "", "fb_is_custom": false}, {"qno": 40, "is_correct": true, "qtext": "A manufacturing company has 20 employees, each paid a basic rate of $5 an hour. A standard working week is 35 hours; overtime is paid at time and a quarter. Last week all employees worked 37 hours, producing 3,000 units.\n\nWhat is the total unit labour cost?", "options": [{"text": "$0.06/unit", "checked": false}, {"text": "$1.25/unit", "checked": true}, {"text": "$1.23/unit", "checked": false}, {"text": "$1.54/unit", "checked": false}], "your_answer": "$1.25/unit", "correct_answer": "$1.25/unit", "debrief": "", "fb_is_custom": false}, {"qno": 41, "is_correct": true, "qtext": "What is the double entry for the sale of goods on credit?", "options": [{"text": "Debit: Payables Credit: Sales", "checked": false}, {"text": "Debit: Receivables Credit: Sales", "checked": true}, {"text": "Debit: Sales Credit: Payables", "checked": false}, {"text": "Debit: Sales Credit: Receivables", "checked": false}], "your_answer": "Debit: Receivables Credit: Sales", "correct_answer": "Debit: Receivables Credit: Sales", "debrief": "", "fb_is_custom": false}, {"qno": 42, "is_correct": false, "qtext": "A company purchases and sells a range of bathroom accessories through a number of outlets throughout a country. Management are considering the removal of some product lines.\n\nWhich of the following is most likely to be useful for this purpose?", "options": [{"text": "Sales by area of the country", "checked": false}, {"text": "Contribution by area of the country", "checked": false}, {"text": "Contribution by product line", "checked": false}, {"text": "Sales by product line", "checked": true}], "your_answer": "Sales by product line", "correct_answer": "Contribution by product line", "debrief": "<p>Management is deciding whether to <strong>drop product lines</strong> \u2014 a relevant-costing decision. For this, <strong>sales revenue alone is misleading</strong>, because a product line can generate high sales but still lose money once its own variable costs are deducted.</p><p><strong>Contribution</strong> (sales revenue &minus; variable costs) shows how much each product line actually adds toward covering fixed costs and profit. A product line with strong sales but poor or negative contribution is a candidate for removal; one with modest sales but strong contribution should usually be kept.</p><p>Sales by product line only tells you about revenue size, not profitability \u2014 it can point management toward exactly the wrong decision.</p>", "fb_is_custom": true}, {"qno": 43, "is_correct": true, "qtext": "What is a cost unit?", "options": [{"text": "The cost per hour of operating a machine", "checked": false}, {"text": "A measure of work output in a standard hour", "checked": false}, {"text": "The cost per unit of electricity consumed", "checked": false}, {"text": "A unit of product or service in relation to which costs are ascertained", "checked": true}], "your_answer": "A unit of product or service in relation to which costs are ascertained", "correct_answer": "A unit of product or service in relation to which costs are ascertained", "debrief": "", "fb_is_custom": false}, {"qno": 44, "is_correct": false, "qtext": "<p>In the spreadsheet below, the cell D10 shows the turnover in Quarter 1.</p>\n<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image (1).png\"/></p>\n<p>\u00a0Which of the following would be a suitable formula for this cell?</p>\n<p></p>", "options": [{"text": "<p>=C10-B10</p>", "checked": true}, {"text": "<p>=(C10+B10)*B1</p>", "checked": false}, {"text": "<p>=C10*B1</p>", "checked": false}, {"text": "<p>=D1B1</p>", "checked": false}], "your_answer": "<p>=C10-B10</p>", "correct_answer": "=C10*B1", "debrief": "<p>Turnover (revenue) for a period is virtually always built as <strong>quantity sold &times; selling price</strong>. Based on the layout of this spreadsheet, the correct formula multiplies the quantity cell by the price cell: <code>=C10*B1</code>.</p><p>The chosen answer, <code>=C10-B10</code>, performs a <strong>subtraction</strong> between two cells in the same row \u2014 that would only make sense if you were calculating a difference (e.g. a variance), not a revenue total. Whenever a spreadsheet question involves computing turnover/revenue/sales value from quantity and price, look for a <strong>multiplication</strong> formula (<code>*</code>), not addition or subtraction.</p>", "fb_is_custom": true}, {"qno": 45, "is_correct": false, "qtext": "<p>Which of the following items are contained in a typical job cost?</p>\n<p>1. Actual material cost</p>\n<p>2. Actual manufacturing overheads</p>\n<p>3. Absorbed manufacturing overheads</p>\n<p>4. Actual labour cost</p>", "options": [{"text": "<p>1, 2 and 4 only</p>", "checked": false}, {"text": "<p>1, 3 and 4 only</p>", "checked": false}, {"text": "<p>1 and 4 only</p>", "checked": true}, {"text": "<p>3 and 4 only</p>", "checked": false}], "your_answer": "<p>1 and 4 only</p>", "correct_answer": "1, 3 and 4 only", "debrief": "<p>A job cost is built from <strong>actual</strong> direct costs plus an <strong>absorbed</strong> (not actual) share of overheads:</p><p>&bull; <strong>Actual material cost</strong> \u2014 traced directly to the job. &check;<br>&bull; <strong>Actual labour cost</strong> \u2014 traced directly to the job. &check;<br>&bull; <strong>Absorbed manufacturing overheads</strong> \u2014 applied using a predetermined overhead absorption rate (e.g. per labour hour). &check;<br>&bull; <strong>Actual manufacturing overheads</strong> \u2014 these are <em>not</em> charged to the job. Actual overheads aren't known until the whole period's costs are collected, which is far too late for costing an individual job as it's completed. &cross;</p><p>That's exactly why overhead absorption rates exist \u2014 to let overheads be charged to jobs in a timely way, using a reasonable estimate rather than waiting for the actual figure. So the correct combination is <strong>1, 3 and 4 only</strong>. Selecting '1 and 4 only' misses that jobs still need an overhead element (just an absorbed one, not the actual one).</p>", "fb_is_custom": true}, {"qno": 46, "is_correct": true, "qtext": "Which of the following departments is a production cost centre in a company producing milk in cartons?", "options": [{"text": "Packaging", "checked": true}, {"text": "Stores", "checked": false}, {"text": "Maintenance", "checked": false}, {"text": "Accounts", "checked": false}], "your_answer": "Packaging", "correct_answer": "Packaging", "debrief": "", "fb_is_custom": false}, {"qno": 47, "is_correct": false, "qtext": "Under absorption costing, which of the following overheads will most likely use allocation?", "options": [{"text": "Electricity", "checked": false}, {"text": "Rent", "checked": false}, {"text": "Insurance", "checked": true}, {"text": "Department supervisor's salary", "checked": false}], "your_answer": "Insurance", "correct_answer": "Department supervisor's salary", "debrief": "<p><strong>Allocation</strong> is used when a whole cost item can be charged <em>wholly and unambiguously</em> to a single cost centre because it clearly belongs to that one centre.</p><p>A <strong>department supervisor's salary</strong> relates to one specific department only \u2014 there's no need to share it out, so it can simply be allocated in full to that department.</p><p><strong>Insurance</strong>, by contrast, typically covers multiple assets or departments (e.g. insuring the whole factory), so it has to be shared out using <strong>apportionment</strong> (using a fair basis such as asset value or floor space), not allocated wholly to one centre.</p>", "fb_is_custom": true}, {"qno": 48, "is_correct": false, "qtext": "Using marginal costing, what is the basis for valuing inventory goods in a manufactured business?", "options": [{"text": "Direct + indirect production costs", "checked": false}, {"text": "Prime costs + variable production overheads", "checked": false}, {"text": "Production costs + variable non-production costs", "checked": false}, {"text": "Prime costs + total variable costs", "checked": true}], "your_answer": "Prime costs + total variable costs", "correct_answer": "Prime costs + variable production overheads", "debrief": "<p><strong>Marginal costing</strong> only ever values inventory using <strong>production</strong> costs \u2014 never costs incurred after production is complete.</p><p>Under marginal costing, inventory = <strong>prime cost + variable production overheads</strong> only. Fixed production overheads are excluded (that's the whole point of marginal costing vs absorption costing), and so are any <strong>non-production</strong> variable costs, such as variable selling or distribution costs \u2014 these are always expensed in the period they're incurred, never carried in inventory.</p><p>The trap answer 'Prime costs + total variable costs' incorrectly pulls in non-production variable costs (e.g. variable selling costs) into the inventory value \u2014 but inventory should only ever reflect the cost of getting goods to their present location and condition, i.e. production costs only.</p>", "fb_is_custom": true}, {"qno": 49, "is_correct": true, "qtext": "<p>An extract from a company's results for the year is as follows:</p>\n<p><img src=\"./Mock Exam 1_ Attempt review _ TYMBAFlex_files/image(5).png\"/></p>\n<p>What is the asset turnover?</p>", "options": [{"text": "<p>0.75</p>", "checked": false}, {"text": "<p>3</p>", "checked": true}, {"text": "<p>1.33</p>", "checked": false}, {"text": "<p>1</p>", "checked": false}], "your_answer": "<p>3</p>", "correct_answer": "3", "debrief": "", "fb_is_custom": false}, {"qno": 50, "is_correct": false, "qtext": "Which of the following is a profit centre manager responsible for?", "options": [{"text": "Costs only", "checked": false}, {"text": "Costs and revenues only", "checked": false}, {"text": "None of the above", "checked": true}, {"text": "Cost, revenues and investment", "checked": false}], "your_answer": "None of the above", "correct_answer": "Costs and revenues only", "debrief": "<p>A <strong>profit centre</strong> manager is responsible for both <strong>costs and revenues</strong> generated by their part of the business, because profit = revenue &minus; costs, and a manager needs control over both to be meaningfully accountable for profit.</p><p>What a profit centre manager is <em>not</em> responsible for is <strong>investment decisions</strong> (capital expenditure, asset acquisition) \u2014 that level of responsibility belongs to an <strong>investment centre</strong> manager, who is accountable for costs, revenues, <em>and</em> the capital invested to generate them.</p><p>So the correct answer is 'Costs and revenues only' \u2014 selecting 'None of the above' overlooks that this is precisely the textbook definition of a profit centre.</p>", "fb_is_custom": true}]</script>
+<script>(function(){
+  var DATA = JSON.parse(document.getElementById('qdata').textContent);
+  var STORAGE_KEY = 'ma_mock1_debrief_progress_v1';
+  var reviewed = {}; // qno -> true
+  var currentFilter = 'all';
+
+  function loadProgress(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === 'object') reviewed = parsed;
+      }
+    }catch(e){ /* localStorage unavailable or corrupt — start fresh */ }
+  }
+
+  function saveProgress(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reviewed));
+    }catch(e){ /* storage full or blocked — progress just won't persist */ }
+  }
+
+  var totalQ = DATA.length;
+  var correctList = DATA.filter(function(d){return d.is_correct;});
+  var incorrectList = DATA.filter(function(d){return !d.is_correct;});
+  var correctCount = correctList.length;
+  var incorrectCount = incorrectList.length;
+  var XP_PER_Q = 2;
+  var examMaxXP = totalQ * XP_PER_Q;
+
+  function stripTags(html){
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g,' ').trim();
+  }
+
+  function escapeAttr(s){
+    return String(s).replace(/"/g,'&quot;');
+  }
+
+  function renderMarquee(){
+    var msgs = [
+      'MOCK EXAM 1 · ATTEMPT REVIEW',
+      correctCount + ' / ' + totalQ + ' CORRECT',
+      'DEBRIEF EVERY MISS TO BANK BONUS XP',
+      'TYMBAFLEX CORRECTIONS ENGINE'
+    ];
+    var text = msgs.join('   ★   ') + '   ★   ';
+    document.getElementById('marquee').textContent = text + text;
+  }
+
+  function optionRowClass(opt, isCorrectQuestion){
+    if(opt.checked && isCorrectQuestion) return 'chosen-correct';
+    if(opt.checked && !isCorrectQuestion) return 'chosen-wrong';
+    return 'plain';
+  }
+
+  // Determine which unchosen option is "the correct one" by matching text to d.correct_answer
+  function markOptions(d){
+    var normTarget = stripTags(d.correct_answer).toLowerCase();
+    return d.options.map(function(opt){
+      var normOpt = stripTags(opt.text).toLowerCase();
+      var isTheCorrectOne = normOpt === normTarget || normTarget.indexOf(normOpt) !== -1 || normOpt.indexOf(normTarget) !== -1;
+      var cls;
+      if(opt.checked && d.is_correct){
+        cls = 'chosen-correct';
+      } else if(opt.checked && !d.is_correct){
+        cls = 'chosen-wrong';
+      } else if(!opt.checked && isTheCorrectOne && !d.is_correct){
+        cls = 'right-unchosen';
+      } else {
+        cls = 'plain';
+      }
+      var mark = '';
+      if(cls === 'chosen-correct') mark = '&#10003;';
+      else if(cls === 'chosen-wrong') mark = '&#10007;';
+      else if(cls === 'right-unchosen') mark = '&#10003;';
+      return '<div class="opt ' + cls + '"><div class="opt-mark">' + mark + '</div>' + opt.text + '</div>';
+    }).join('');
+  }
+
+  function cardTemplate(d){
+    var stateClass = d.is_correct ? 'correct' : 'incorrect';
+    var stateLabel = d.is_correct ? 'Correct' : 'Incorrect';
+    var snippet = stripTags(d.qtext).slice(0, 90);
+    var isReviewed = !!reviewed[d.qno];
+
+    var tags = '<span class="stamp ' + stateClass + '">' + stateLabel + '</span>' +
+      '<span class="stamp xp">' + (d.is_correct ? ('+' + XP_PER_Q + ' XP') : (isReviewed ? ('+' + XP_PER_Q + ' XP') : '0 XP')) + '</span>';
+    if(isReviewed){
+      tags += '<span class="stamp reviewed">Reviewed</span>';
+    }
+
+    var body = '<div class="qtext">' + d.qtext + '</div>';
+    body += '<div class="opts">' + markOptions(d) + '</div>';
+
+    if(!d.is_correct){
+      body += '<div class="compare">' +
+        '<div class="box wrong"><div class="box-lbl">Your Answer</div><p>' + d.your_answer + '</p></div>' +
+        '<div class="box right"><div class="box-lbl">Correct Answer</div><p>' + d.correct_answer + '</p></div>' +
+      '</div>';
+
+      body += '<div class="debrief"><div class="debrief-head"><span class="pin"></span>Debrief &amp; Working</div>' +
+        '<div class="debrief-body">' + (d.debrief && d.debrief.trim() ? d.debrief : '<p>No further working provided for this item — review the correct answer above against your notes.</p>') + '</div></div>';
+
+      body += '<div class="qfooter">';
+      if(isReviewed){
+        body += '<button class="review-btn done" disabled>&#10003; Debrief Reviewed</button>';
+        body += '<span class="xp-earned">+' + XP_PER_Q + ' bonus XP banked</span>';
+      } else {
+        body += '<button class="review-btn" data-action="review" data-qno="' + d.qno + '">Mark Debrief Reviewed &middot; +' + XP_PER_Q + ' XP</button>';
+        body += '<span class="xp-earned" style="color:#777;">Review to bank bonus XP</span>';
+      }
+      body += '</div>';
+    } else {
+      if(d.debrief && d.debrief.trim()){
+        body += '<div class="debrief"><div class="debrief-head"><span class="pin" style="background:var(--green-deep);"></span>Why This Works</div>' +
+          '<div class="debrief-body">' + d.debrief + '</div></div>';
+      }
+      body += '<div class="qfooter"><span class="xp-earned">+' + XP_PER_Q + ' XP earned on the exam</span></div>';
+    }
+
+    return (
+      '<div class="qcard ' + stateClass + '" data-qno="' + d.qno + '" id="q-' + d.qno + '">' +
+        '<div class="qhead" data-action="toggle" data-qno="' + d.qno + '">' +
+          '<div class="qno-badge">' + d.qno + '</div>' +
+          '<div class="qhead-mid">' +
+            '<div class="qhead-snippet">' + snippet + (stripTags(d.qtext).length > 90 ? '…' : '') + '</div>' +
+            '<div class="qhead-tags">' + tags + '</div>' +
+          '</div>' +
+          '<div class="chevron">+</div>' +
+        '</div>' +
+        '<div class="qbody">' + body + '</div>' +
+      '</div>'
+    );
+  }
+
+  function matchesFilter(d){
+    if(currentFilter === 'all') return true;
+    if(currentFilter === 'correct') return d.is_correct;
+    if(currentFilter === 'incorrect') return !d.is_correct;
+    if(currentFilter === 'unreviewed') return !d.is_correct && !reviewed[d.qno];
+    return true;
+  }
+
+  function render(){
+    var list = document.getElementById('qlist');
+    list.innerHTML = DATA.map(cardTemplate).join('');
+    applyFilter();
+    updateStats();
+    updateCounts();
+  }
+
+  function applyFilter(){
+    var any = false;
+    DATA.forEach(function(d){
+      var el = document.getElementById('q-' + d.qno);
+      if(!el) return;
+      if(matchesFilter(d)){
+        el.classList.remove('hidden');
+        any = true;
+      } else {
+        el.classList.add('hidden');
+      }
+    });
+    document.getElementById('emptyState').style.display = any ? 'none' : 'block';
+  }
+
+  function updateCounts(){
+    document.getElementById('cAll').textContent = totalQ;
+    document.getElementById('cIncorrect').textContent = incorrectCount;
+    document.getElementById('cCorrect').textContent = correctCount;
+    var unreviewedCount = incorrectList.filter(function(d){return !reviewed[d.qno];}).length;
+    document.getElementById('cUnreviewed').textContent = unreviewedCount;
+  }
+
+  function updateStats(){
+    var reviewedCount = Object.keys(reviewed).length;
+    var examXP = correctCount * XP_PER_Q;
+    var bonusXP = reviewedCount * XP_PER_Q;
+    var totalXP = examXP + bonusXP;
+    var pct = Math.round((correctCount / totalQ) * 100);
+
+    document.getElementById('statCorrect').textContent = correctCount;
+    document.getElementById('statIncorrect').textContent = incorrectCount;
+    document.getElementById('statPct').textContent = pct + '%';
+    document.getElementById('statXP').textContent = totalXP;
+
+    document.getElementById('examScoreLabel').textContent = examXP + ' / ' + examMaxXP + ' XP';
+    document.getElementById('examFill').style.width = (examXP / examMaxXP * 100) + '%';
+
+    var reviewPct = incorrectCount ? Math.round((reviewedCount / incorrectCount) * 100) : 100;
+    document.getElementById('reviewLabel').textContent = reviewedCount + ' / ' + incorrectCount;
+    document.getElementById('reviewFill').style.width = reviewPct + '%';
+
+    updateCounts();
+  }
+
+  var toastTimer = null;
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  document.getElementById('qlist').addEventListener('click', function(e){
+    var toggleEl = e.target.closest('[data-action="toggle"]');
+    if(toggleEl){
+      var card = toggleEl.closest('.qcard');
+      card.classList.toggle('open');
+      return;
+    }
+    var reviewBtn = e.target.closest('[data-action="review"]');
+    if(reviewBtn){
+      var qno = reviewBtn.getAttribute('data-qno');
+      if(!reviewed[qno]){
+        reviewed[qno] = true;
+        saveProgress();
+        var d = DATA.find(function(x){ return String(x.qno) === String(qno); });
+        var openCards = Array.prototype.map.call(document.querySelectorAll('.qcard.open'), function(c){return c.getAttribute('data-qno');});
+        render();
+        // restore open state
+        openCards.forEach(function(qn){
+          var el = document.getElementById('q-' + qn);
+          if(el) el.classList.add('open');
+        });
+        showToast('+' + XP_PER_Q + ' XP BANKED — Q' + qno + ' LOCKED IN');
+      }
+    }
+  });
+
+  document.getElementById('filters').addEventListener('click', function(e){
+    var btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentFilter = btn.getAttribute('data-filter');
+    applyFilter();
+  });
+
+  var resetBtn = document.getElementById('resetProgress');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      if(confirm('Clear all saved debrief progress on this device? This cannot be undone.')){
+        reviewed = {};
+        saveProgress();
+        render();
+        showToast('PROGRESS CLEARED');
+      }
+    });
+  }
+
+  loadProgress();
+  renderMarquee();
+  render();
+})();
+</script>
+</body>
+</html>

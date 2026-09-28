@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FA1 Mock Exam 1 — Corrected Review · TYMBAFlex</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --ink:#111111;
+    --paper:#F4EEDD;
+    --card:#FFFFFF;
+    --red:#E63B2E;
+    --blue:#1D3FA0;
+    --yellow:#F5C518;
+    --green:#2E8B4F;
+    --green-deep:#1F6B39;
+    --grey:#777777;
+    --line:4px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle, rgba(17,17,17,0.06) 1px, transparent 1px);
+    background-size: 18px 18px;
+    color:var(--ink);
+    font-family: ui-monospace,"JetBrains Mono","Space Mono",Menlo,Consolas,monospace;
+    padding-bottom:80px;
+  }
+  h1,h2,h3,h4,.display{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    text-transform:uppercase;
+    letter-spacing:-0.02em;
+    margin:0;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 16px;}
+
+  /* ===== Top marquee ===== */
+  .topbar{
+    background:var(--ink);
+    color:var(--paper);
+    border-bottom:var(--line) solid var(--ink);
+    padding:8px 0;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .marquee{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.08em;
+    animation: scroll-left 22s linear infinite;
+  }
+  @keyframes scroll-left{
+    0%{transform:translateX(0);}
+    100%{transform:translateX(-50%);}
+  }
+
+  /* ===== Header ===== */
+  header.hero{
+    padding:28px 0 18px;
+  }
+  .brandmark{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .mark{position:relative;width:34px;height:34px;flex:0 0 auto;}
+  .mark-circle{position:absolute;left:0;top:0;width:19px;height:19px;border-radius:50%;background:var(--red);border:2px solid var(--ink);}
+  .mark-tri{position:absolute;left:12px;top:8px;width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:17px solid var(--blue);}
+  .mark-square{position:absolute;left:19px;top:0;width:14px;height:14px;background:var(--yellow);border:2px solid var(--ink);}
+  .brand-name{font-size:13px;font-weight:800;letter-spacing:0.06em;}
+  .brand-name span{color:var(--red);}
+
+  h1.title{font-size:clamp(28px,6vw,46px);line-height:0.95;}
+  .subtitle{
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--grey);
+    margin-top:8px;
+  }
+
+  /* ===== Panel base (brutalist card) ===== */
+  .panel{
+    background:var(--card);
+    border:var(--line) solid var(--ink);
+    box-shadow:8px 8px 0 0 var(--ink);
+  }
+
+  /* ===== Stats dashboard ===== */
+  .dash{
+    margin-top:22px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+  }
+  .stat{
+    border-right:var(--line) solid var(--ink);
+    padding:14px 12px;
+    background:var(--card);
+  }
+  .stat:last-child{border-right:none;}
+  .stat .num{font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;font-size:30px;line-height:1;}
+  .stat .lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;color:var(--grey);margin-top:4px;}
+  .stat.correct .num{color:var(--green-deep);}
+  .stat.incorrect .num{color:var(--red);}
+  .stat.xp .num{color:var(--blue);}
+  @media (max-width:600px){
+    .dash{grid-template-columns:repeat(2,1fr);}
+    .stat:nth-child(2){border-right:none;}
+    .stat:nth-child(1),.stat:nth-child(2){border-bottom:var(--line) solid var(--ink);}
+  }
+
+  /* ===== Progress bars ===== */
+  .progress-block{margin-top:16px;padding:16px;}
+  .progress-row{margin-bottom:14px;}
+  .progress-row:last-child{margin-bottom:0;}
+  .progress-label{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;
+    margin-bottom:6px;
+  }
+  .progress-label .val{font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;font-size:14px;letter-spacing:0;}
+  .track{
+    height:20px;
+    border:3px solid var(--ink);
+    background:repeating-linear-gradient(45deg,#00000008,#00000008 6px,transparent 6px,transparent 12px), #fff;
+    position:relative;
+    overflow:hidden;
+  }
+  .fill{
+    height:100%;
+    width:0%;
+    transition:width 0.5s cubic-bezier(.2,.9,.3,1.2);
+    position:relative;
+  }
+  .fill.exam{background:repeating-linear-gradient(135deg,var(--green),var(--green) 10px,var(--green-deep) 10px,var(--green-deep) 20px);}
+  .fill.review{background:repeating-linear-gradient(135deg,var(--blue),var(--blue) 10px,#13297a 10px,#13297a 20px);}
+
+  /* ===== Filter tabs ===== */
+  .filters{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    flex-wrap:wrap;
+  }
+  .filter-btn{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:12px;
+    letter-spacing:0.03em;
+    padding:9px 16px;
+    border:3px solid var(--ink);
+    background:var(--card);
+    cursor:pointer;
+    box-shadow:4px 4px 0 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease;
+    color:var(--ink);
+  }
+  .filter-btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 0 var(--ink);}
+  .filter-btn:active,.filter-btn.active{
+    transform:translate(4px,4px);
+    box-shadow:0 0 0 0 var(--ink);
+  }
+  .filter-btn.active{background:var(--yellow);}
+  .filter-btn .count{opacity:.6;font-size:10px;margin-left:4px;}
+
+  /* ===== Question list ===== */
+  .qlist{margin-top:22px;display:flex;flex-direction:column;gap:16px;}
+
+  .qcard{
+    background:var(--card);
+    border:var(--line) solid var(--ink);
+    box-shadow:7px 7px 0 0 var(--ink);
+    scroll-margin-top:16px;
+  }
+  .qcard.hidden{display:none;}
+
+  .qhead{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    cursor:pointer;
+    user-select:none;
+    border-bottom:var(--line) solid transparent;
+  }
+  .qcard.open .qhead{border-bottom-color:var(--ink);}
+
+  .qno-badge{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:15px;
+    width:38px;height:38px;
+    flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    border:3px solid var(--ink);
+    background:var(--paper);
+  }
+  .qcard.correct .qno-badge{background:var(--green);color:#fff;}
+  .qcard.incorrect .qno-badge{background:var(--red);color:#fff;}
+
+  .qhead-mid{flex:1;min-width:0;}
+  .qhead-snippet{
+    font-size:12.5px;
+    font-weight:600;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+  }
+  .qhead-tags{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;}
+
+  .stamp{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:9.5px;
+    letter-spacing:0.05em;
+    padding:2px 7px;
+    border:2px solid currentColor;
+    text-transform:uppercase;
+    display:inline-block;
+  }
+  .stamp.correct{color:var(--green-deep);}
+  .stamp.incorrect{color:var(--red);}
+  .stamp.xp{color:var(--ink);background:var(--yellow);border-color:var(--ink);}
+  .stamp.reviewed{color:#fff;background:var(--blue);border-color:var(--blue);}
+
+  .chevron{
+    flex:0 0 auto;
+    width:26px;height:26px;
+    border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:14px;font-weight:900;
+    transition:transform .2s ease;
+  }
+  .qcard.open .chevron{transform:rotate(45deg);}
+
+  .qbody{display:none;padding:0 16px 20px;}
+  .qcard.open .qbody{display:block;}
+
+  .qtext{font-size:13.5px;line-height:1.55;margin-top:14px;}
+  .qtext p{margin:0 0 10px;}
+  .qtext table{border-collapse:collapse;width:100%;margin:10px 0;font-size:12.5px;}
+  .qtext table td{border:2px solid var(--ink);padding:5px 8px;}
+  .qtext table td:last-child{text-align:right;}
+
+  .opts{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .opt{
+    display:flex;align-items:flex-start;gap:10px;
+    border:2.5px solid var(--ink);
+    padding:9px 11px;
+    font-size:12.5px;
+    background:#fff;
+  }
+  .opt-mark{
+    flex:0 0 auto;width:20px;height:20px;
+    border:2px solid var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-size:12px;font-weight:900;
+    margin-top:1px;
+  }
+  .opt.chosen-correct{background:#EAF7EE;border-color:var(--green-deep);}
+  .opt.chosen-correct .opt-mark{background:var(--green);color:#fff;border-color:var(--green-deep);}
+  .opt.chosen-wrong{background:#FDECEA;border-color:var(--red);}
+  .opt.chosen-wrong .opt-mark{background:var(--red);color:#fff;border-color:var(--red);}
+  .opt.right-unchosen{background:#EAF7EE;border-style:dashed;border-color:var(--green-deep);}
+  .opt.right-unchosen .opt-mark{background:#fff;color:var(--green-deep);}
+  .opt.plain .opt-mark{background:#fff;color:transparent;}
+  .opt p{margin:0;}
+
+  .compare{
+    margin-top:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+  @media (max-width:520px){.compare{grid-template-columns:1fr;}}
+  .compare .box{
+    border:3px solid var(--ink);
+    padding:10px 11px;
+  }
+  .compare .box.wrong{background:#FDECEA;border-color:var(--red);}
+  .compare .box.right{background:#EAF7EE;border-color:var(--green-deep);}
+  .compare .box .box-lbl{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+  .compare .box.wrong .box-lbl{color:var(--red);}
+  .compare .box.right .box-lbl{color:var(--green-deep);}
+  .compare .box p{margin:0;font-size:12.5px;}
+
+  .debrief{
+    margin-top:16px;
+    border:3px solid var(--ink);
+    background:#FFFDF5;
+    position:relative;
+  }
+  .debrief::before{
+    content:"";
+    position:absolute;top:-9px;left:18px;
+    width:34px;height:16px;
+    background:var(--yellow);
+    border:2px solid var(--ink);
+    transform:rotate(-3deg);
+  }
+  .debrief-head{
+    padding:12px 14px 4px;
+    font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+    display:flex;align-items:center;gap:8px;
+    color:var(--ink);
+  }
+  .debrief-head .pin{width:8px;height:8px;border-radius:50%;background:var(--red);border:1px solid var(--ink);}
+  .debrief-body{padding:6px 14px 14px;font-size:13px;line-height:1.6;}
+  .debrief-body p{margin:0 0 10px;}
+  .debrief-body p:last-child{margin-bottom:0;}
+  .debrief-body strong{background:linear-gradient(transparent 60%, var(--yellow) 60%);}
+
+  .note-tag{
+    display:inline-block;
+    font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--grey);
+    margin-top:10px;
+  }
+
+  .qfooter{
+    margin-top:16px;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:10px;
+  }
+  .review-btn{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:11.5px;
+    padding:9px 14px;
+    border:3px solid var(--ink);
+    background:var(--yellow);
+    cursor:pointer;
+    box-shadow:4px 4px 0 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease, background .15s ease;
+  }
+  .review-btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 0 var(--ink);}
+  .review-btn:active{transform:translate(4px,4px);box-shadow:0 0 0 0 var(--ink);}
+  .review-btn.done{
+    background:var(--blue);color:#fff;cursor:default;
+    box-shadow:4px 4px 0 0 var(--ink);
+    transform:none;
+  }
+  .review-btn.done:hover{transform:none;box-shadow:4px 4px 0 0 var(--ink);}
+
+  .xp-earned{font-size:11px;font-weight:800;color:var(--green-deep);}
+
+  /* ===== Toast ===== */
+  #toast{
+    position:fixed;left:50%;bottom:24px;transform:translate(-50%,120%);
+    background:var(--ink);color:var(--yellow);
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:13px;letter-spacing:.03em;
+    padding:12px 20px;
+    border:3px solid var(--ink);
+    box-shadow:6px 6px 0 0 var(--red);
+    transition:transform .35s cubic-bezier(.2,.9,.3,1.2);
+    z-index:50;
+    white-space:nowrap;
+  }
+  #toast.show{transform:translate(-50%,0);}
+
+  /* ===== Footer ===== */
+  footer{
+    margin-top:34px;
+    padding:20px 16px 4px;
+    text-align:center;
+    font-size:10.5px;
+    color:var(--grey);
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+
+  .empty-state{
+    padding:40px 16px;text-align:center;
+    font-size:12px;font-weight:700;color:var(--grey);
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="marquee" id="marquee"></div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="brandmark">
+      <div class="mark"><img src="logo.png" alt="logo" style="width:100%;height:100%;object-fit:contain;"></div>
+      <div class="brand-name">TYMBA<span>FLEX</span> · CORRECTIONS ENGINE</div>
+    </div>
+    <h1 class="title">FA1 Mock Exam 1<br>Attempt Review</h1>
+    <div class="subtitle">50 questions · deferred feedback · debrief mode</div>
+  </header>
+
+  <div class="dash panel">
+    <div class="stat correct"><div class="num" id="statCorrect">0</div><div class="lbl">Correct</div></div>
+    <div class="stat incorrect"><div class="num" id="statIncorrect">0</div><div class="lbl">Incorrect</div></div>
+    <div class="stat"><div class="num" id="statPct">0%</div><div class="lbl">Score</div></div>
+    <div class="stat xp"><div class="num" id="statXP">0</div><div class="lbl">Total XP</div></div>
+  </div>
+
+  <div class="progress-block panel" style="margin-top:14px;">
+    <div class="progress-row">
+      <div class="progress-label"><span>Exam Score</span><span class="val" id="examScoreLabel">0 / 100 XP</span></div>
+      <div class="track"><div class="fill exam" id="examFill"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>Debrief Progress (review every miss to bank bonus XP)</span><span class="val" id="reviewLabel">0 / 0</span></div>
+      <div class="track"><div class="fill review" id="reviewFill"></div></div>
+    </div>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-filter="all">All <span class="count" id="cAll"></span></button>
+    <button class="filter-btn" data-filter="incorrect">Needs Debrief <span class="count" id="cIncorrect"></span></button>
+    <button class="filter-btn" data-filter="correct">Correct <span class="count" id="cCorrect"></span></button>
+    <button class="filter-btn" data-filter="unreviewed">Not Yet Reviewed <span class="count" id="cUnreviewed"></span></button>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">
+    <div style="font-size:9.5px;font-weight:800;color:var(--grey);text-transform:uppercase;letter-spacing:.05em;">&#128190; Progress saves automatically to this browser</div>
+    <button id="resetProgress" style="font-family:ui-monospace,monospace;font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;background:none;border:2px solid var(--grey);color:var(--grey);padding:4px 9px;cursor:pointer;">Reset Progress</button>
+  </div>
+
+  <div class="qlist" id="qlist"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">No questions match this filter.</div>
+
+  <footer>TYMBAFlex &middot; FA1 Corrections Engine &middot; Keep grinding, the exam doesn't grade effort but your memory does.</footer>
+</div>
+
+<div id="toast"></div>
+
+<script id="qdata" type="application/json">[{"qno": 1, "is_correct": false, "qtext": "<p>Primavera's receivables total $83,000, but then she discovers the following errors:</p>\n<p>(1) A refund sent by bank transfer to a credit customer of $3,000 was not recorded by<br/>Primavera. The customer had already paid the invoice before the credit note was issued.<br/>(2) Primavera realised that a customer owing $6,500 would not be able to pay their debt so decided to write it off. This has not been recorded.</p>\n<p><strong>What should the total of her receivables be after correcting the following errors?</strong></p>", "options": [{"text": "<p>$73,500</p>", "checked": true}, {"text": "<p>$76,500</p>", "checked": false}, {"text": "<p>$79,500</p>", "checked": false}, {"text": "<p>$83,000</p>", "checked": false}], "your_answer": "<p>$73,500</p>", "correct_answer": "$79,500", "debrief": "<p>The entry required to record the refund is Dr Receivables, Cr Bank. The following entries have already been made:<br/>Initial sale: Dr Receivables, Cr Sales<br/>Payment received: Dr Bank, Cr Receivables<br/>Credit note issued: Dr Sales returns, Cr Receivables<br/>Therefore one debit and two credit entries have been made to the receivables which are then equalled out when the refund entry is posted.</p>", "fb_is_custom": false}, {"qno": 2, "is_correct": true, "qtext": "<p>Edward has a balance of $22,600 in his individual payables ledger as owing to Bella. The supplier statement sent by Bella shows that $22,800 is owed.</p>\n<p><strong>Which of the following balances would explain the difference?</strong></p>", "options": [{"text": "<p>Edward paid $1,200 to Bella but Edward recorded this in Bella\u2019s individual payables ledger as $1,000</p>", "checked": false}, {"text": "<p>A contra of $200 was agreed with Bella which Edward has recorded but Bella has not</p>", "checked": true}, {"text": "<p>Edward returned $200 of goods and received a credit note but has not recorded this in the accounting system</p>", "checked": false}, {"text": "<p>A payment of $200 was made by Edward to Bella but Edward has not recorded this</p>", "checked": false}], "your_answer": "<p>A contra of $200 was agreed with Bella which Edward has recorded but Bella has not</p>", "correct_answer": "A contra of $200 was agreed with Bella which Edward has recorded but Bella has not", "debrief": "<p>A contra would reduce the balance owed so as Edward has recorded this but Bella has not.</p>\n<p>This explains the difference as the supplier statement sent by Bella is showing a balance that is $200 higher.</p>\n<p>If Edward paid $1,200 but recorded it as $1,000 in Bella\u2019s individual payables ledger this would result in Edward\u2019s balance being $200 higher.</p>\n<p>If Edward has not recorded a credit note her balance would be $200 higher.</p>\n<p>If Edward paid $200 but has not recorded it this would make her balance $200 higher</p>", "fb_is_custom": false}, {"qno": 3, "is_correct": true, "qtext": "<p>Jamie works in a factory on a tractor assembly line and is paid a rate of $3.75 per hour for a 37 hour week. All overtime is paid at time and a quarter. In addition a piecework rate of $23 for every tractor assembled each week is paid. Last week James worked 45 hours and completed the assembly of four tractors.</p>\n<p><strong>How much is Jamie\u2019s gross pay for the week?</strong></p>", "options": [{"text": "<p>$168.75</p>", "checked": false}, {"text": "<p>$210.94</p>", "checked": false}, {"text": "<p>$268.25</p>", "checked": true}, {"text": "<p>$302.94</p>", "checked": false}], "your_answer": "<p>$268.25</p>", "correct_answer": "$268.25", "debrief": "", "fb_is_custom": false}, {"qno": 4, "is_correct": false, "qtext": "<p>An accounts assistant has made the following errors.</p>\n<p>A cash transaction of $100 not entered in the accounting records at all.</p>\n<p>A discount received of $30 was entered in the debit side of the revenue account and correctly posted to the payables account.<br/>$300 cash drawings were entered in the repairs expense account and correctly posted to the bank general ledger account.</p>\n<p>When they try to post a transaction that does not balance the difference is recorded in the suspense account.</p>\n<p><strong>What would be the balance on the suspense account before these errors were corrected?</strong></p>", "options": [{"text": "<p>Cr $30</p>", "checked": true}, {"text": "<p>Cr $60</p>", "checked": false}, {"text": "<p>Dr $100</p>", "checked": false}, {"text": "<p>Cr $300</p>", "checked": false}], "your_answer": "<p>Cr $30</p>", "correct_answer": "Cr $60", "debrief": "<p>The only transaction which would generate a suspense account entry is the discount received of $30 debited to the revenue account. What is significant is not that it was posted to the wrong account, but that it was posted as a debit rather than a credit. This will need to be balanced by a $60 credit entry in the suspense account.</p>", "fb_is_custom": false}, {"qno": 5, "is_correct": true, "qtext": "<p><strong>Which of the following are possible disadvantages of a computerised accounting system?</strong></p>\n<p>(1) They can produce a range of reports<br/>(2) Need for security checks to prevent unauthorised access<br/>(3) Time needed to set the system up and train staff</p>", "options": [{"text": "<p>1 and 2 only</p>", "checked": false}, {"text": "<p>1 and 3 only</p>", "checked": false}, {"text": "<p>2 and 3 only</p>", "checked": true}, {"text": "<p>1, 2 and 3</p>", "checked": false}], "your_answer": "<p>2 and 3 only</p>", "correct_answer": "2 and 3 only", "debrief": "<p>The ability for the system to produce a range of reports is considered an advantage of computerised systems</p>", "fb_is_custom": false}, {"qno": 6, "is_correct": true, "qtext": "<p>Jonny has just started-up a business. He introduced $10,000 of his own savings, equipment worth $2,500 and obtained a bank loan of $1,000.</p>\n<p><strong>What is the correct balance on Joanne's capital account following these transactions?</strong></p>", "options": [{"text": "<p>$10,000</p>", "checked": false}, {"text": "<p>$11,000</p>", "checked": false}, {"text": "<p>$12,500</p>", "checked": true}, {"text": "<p>$13,500</p>", "checked": false}], "your_answer": "<p>$12,500</p>", "correct_answer": "$12,500", "debrief": "<p>Jonny has contributed $10,000 cash and $2,500 equipment to the business and this forms the capital injected. The bank loan is a liability (Dr Bank, Cr Bank loan liability) and does not form part of capital.</p>", "fb_is_custom": false}, {"qno": 7, "is_correct": true, "qtext": "<p>Angelina sold 50 units of inventory with a list price of $25 per unit to Emily. She gives Emily a 10% trade discount and a 5% settlement discount if she pays within 14 days although Emily typically takes a full 30 days' credit.</p>\n<p><strong>What will be the total of the invoice that Angelina issues to Emily for this transaction?</strong></p>", "options": [{"text": "<p>$1,063</p>", "checked": false}, {"text": "<p>$1,069</p>", "checked": false}, {"text": "<p>$1,125</p>", "checked": true}, {"text": "<p>$1,250</p>", "checked": false}], "your_answer": "<p>$1,125</p>", "correct_answer": "$1,125", "debrief": "", "fb_is_custom": false}, {"qno": 8, "is_correct": true, "qtext": "<p>Berry is employed as an accounting technician in the payables ledger section of a contract cleaning company.</p>\n<p><strong>Upon making a payment to a supplier, what is the sequence of events that Berry should carry out?</strong></p>", "options": [{"text": "<p>Draw up a cheque for signing, check invoice with goods received note, check invoice with purchase order, check invoice calculation</p>", "checked": false}, {"text": "<p>Check invoice with purchase order, draw up a cheque for signing, check invoice with goods received note, check invoice calculation</p>", "checked": false}, {"text": "<p>Check invoice with purchase order, check invoice with goods received note, check invoice calculation, draw up a cheque for signing</p>", "checked": true}, {"text": "<p>Check invoice calculation, draw up a cheque for signing, check invoice with purchase order, check invoice with goods received note</p>", "checked": false}], "your_answer": "<p>Check invoice with purchase order, check invoice with goods received note, check invoice calculation, draw up a cheque for signing</p>", "correct_answer": "Check invoice with purchase order, check invoice with goods received note, check invoice calculation, draw up a cheque for signing", "debrief": "", "fb_is_custom": false}, {"qno": 9, "is_correct": true, "qtext": "<p>Phillip's bank reconciliation statement shows outstanding lodgements paid in by Phillip of $3,800 and unpresented cheques to suppliers of $3,500. His bank account in his general ledger shows a debit balance of $25,000.</p>\n<p><strong>What balance does Phillip's bank statement show?</strong></p>", "options": [{"text": "<p>$25,000</p>", "checked": false}, {"text": "<p>$24,700</p>", "checked": true}, {"text": "<p>$25,300</p>", "checked": false}, {"text": "<p>$32,300</p>", "checked": false}], "your_answer": "<p>$24,700</p>", "correct_answer": "$24,700", "debrief": "", "fb_is_custom": false}, {"qno": 10, "is_correct": true, "qtext": "<p>Bill works under a guaranteed minimum piecework system based on output produced.</p>\n<p><strong>Which of the following explains this?</strong></p>", "options": [{"text": "<p>Basic pay goes up in proportion to output</p>", "checked": false}, {"text": "<p>Earnings are the same each pay period</p>", "checked": false}, {"text": "<p>Under this system the wage cost per unit produced remains constant\u00a0</p>", "checked": false}, {"text": "<p>Basic earnings will increase as output increases above a guaranteed minimum level of earnings</p>", "checked": true}], "your_answer": "<p>Basic earnings will increase as output increases above a guaranteed minimum level of earnings</p>", "correct_answer": "Basic earnings will increase as output increases above a guaranteed minimum level of earnings", "debrief": "<p>Bill is guaranteed a minimum amount of pay and then once he has reached a certain level of output his pay will increase.</p>", "fb_is_custom": false}, {"qno": 11, "is_correct": true, "qtext": "<p><strong>Which of the following errors will require an entry to a suspense account?</strong></p>", "options": [{"text": "<p>The payment for motor vehicle repairs was debited to the motor vehicles asset account with the correct entry being made in the bank account</p>", "checked": false}, {"text": "<p>Wages paid at the end of the month were correctly recorded in the wages expense account and debited in the bank account</p>", "checked": true}, {"text": "<p>Discounts received were omitted from the accounting records</p>", "checked": false}, {"text": "<p>A credit purchase was recorded as a cash purchase</p>", "checked": false}], "your_answer": "<p>Wages paid at the end of the month were correctly recorded in the wages expense account and debited in the bank account</p>", "correct_answer": "Wages paid at the end of the month were correctly recorded in the wages expense account and debited in the bank account", "debrief": "<p>If the wages were correctly recorded in the wages expense account then an entry has been made to debit wages expense and debit bank. This double entry does not balance and so a suspense account entry will be needed.</p>", "fb_is_custom": false}, {"qno": 12, "is_correct": true, "qtext": "<p><strong>Which of the following is an example of asset expenditure?</strong></p>", "options": [{"text": "<p>Paying for a new roof for the business' warehouse</p>", "checked": true}, {"text": "<p>Paying for the insurance on the business' head office</p>", "checked": false}, {"text": "<p>Paying commission to salesmen based on the number of units sold</p>", "checked": false}, {"text": "<p>Paying for repairs to the engine of the business' delivery van</p>", "checked": false}], "your_answer": "<p>Paying for a new roof for the business' warehouse</p>", "correct_answer": "Paying for a new roof for the business' warehouse", "debrief": "<p>Insurance costs, salesmen commission and engine repairs are examples of expenses charged to profit or loss.</p>", "fb_is_custom": false}, {"qno": 13, "is_correct": true, "qtext": "<p><strong>Which of the following items would appear on opposite sides of a trial balance?</strong></p>", "options": [{"text": "<p>Sales and Returns out\u00a0</p>", "checked": false}, {"text": "<p>Inventory and Drawings</p>", "checked": false}, {"text": "<p>Carriage in and Returns In</p>", "checked": false}, {"text": "<p>Receivables and Interest income</p>", "checked": true}], "your_answer": "<p>Receivables and Interest income</p>", "correct_answer": "Receivables and Interest income", "debrief": "", "fb_is_custom": false}, {"qno": 14, "is_correct": false, "qtext": "<p>Samantha buys goods from Lisa on 60-day credit terms. Alternatively, a 10% cash discount is available on any payment received within 10 days. During August the following transactions took place:</p>\n<p>August 15 Samantha buys $1,000 of goods<br/>August 22 Samantha pays Lisa a cheque for $450</p>\n<p><strong>What is the balance of Samantha's account in Lisa's individual receivables ledger at 31 August?</strong></p>", "options": [{"text": "<p>$450</p>", "checked": false}, {"text": "<p>$500</p>", "checked": false}, {"text": "<p>$550</p>", "checked": true}, {"text": "<p>$600</p>", "checked": false}], "your_answer": "<p>$550</p>", "correct_answer": "$500", "debrief": "<p>Samantha owes $1,000 for the goods bought on 15 August. The 10% cash discount only applies if payment is received within 10 days &mdash; her payment on 22 August is 7 days later, so it still qualifies.</p><p><strong>Working the payment backwards:</strong> the $450 cheque is a <em>discounted</em> settlement, not the raw invoice amount. If $450 was paid after a 10% discount, the invoice amount being cleared was $450 &divide; 90% = $500 (check: $500 &minus; 10% of $500 = $500 &minus; $50 = $450 &check;).</p><p><strong>Balance remaining</strong> = $1,000 (goods bought) &minus; $500 (amount cleared by the discounted payment) = <strong>$500</strong>.</p><p>The trap: subtracting the cheque amount directly ($1,000 &minus; $450 = $550) ignores that the $450 already reflects a discount, so it understates how much of the debt was actually cleared.</p>", "fb_is_custom": true}, {"qno": 15, "is_correct": true, "qtext": "<p>Mark buys goods on credit from Linda but finds that some of them are faulty.</p>\n<p><strong>What document would Mark receive from Linda due to return of the faulty goods?</strong></p>", "options": [{"text": "<p>Debit note</p>", "checked": false}, {"text": "<p>Credit note</p>", "checked": true}, {"text": "<p>Sales invoice</p>", "checked": false}, {"text": "<p>Purchase invoice</p>", "checked": false}], "your_answer": "<p>Credit note</p>", "correct_answer": "Credit note", "debrief": "", "fb_is_custom": false}, {"qno": 16, "is_correct": true, "qtext": "<p><strong>Which of the following statements are true?</strong></p>\n<p>(1) Once issued a banker's draft cannot be stopped<br/>(2) The drawee of a cheque or a banker's draft is usually a bank</p>", "options": [{"text": "<p>Statement 1 only</p>", "checked": false}, {"text": "<p>Statement 2 only</p>", "checked": false}, {"text": "<p>Both statement 1 and statement 2</p>", "checked": true}, {"text": "<p>Neither statement 1 nor statement 2</p>", "checked": false}], "your_answer": "<p>Both statement 1 and statement 2</p>", "correct_answer": "Both statement 1 and statement 2", "debrief": "<p>The drawee of a cheque or banker's draft is the person or organisation, typically a bank, who must pay a cheque, draft or bill.</p>", "fb_is_custom": false}, {"qno": 17, "is_correct": true, "qtext": "<p>A business has the following year end payroll information<br/>Gross salaries and wages\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0$95,116<br/>Income tax deducted\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0$20,354<br/>Employers\u2019 pension contributions \u00a0 \u00a0 $8,928<br/>Employees\u2019 pension contributions $\u00a0 \u00a07,678</p>\n<p><strong>What is the amount of net wages and salaries paid to employees for the year?</strong></p>", "options": [{"text": "<p>$58,156</p>", "checked": false}, {"text": "<p>$67,084</p>", "checked": true}, {"text": "<p>$74,762</p>", "checked": false}, {"text": "<p>$65,834</p>", "checked": false}], "your_answer": "<p>$67,084</p>", "correct_answer": "$67,084", "debrief": "<p>The net wages and salaries paid to employees is the gross wages and salaries figure less any employee deductions such as income tax and pension contributions (employee only).</p>", "fb_is_custom": false}, {"qno": 18, "is_correct": true, "qtext": "<p>At the end of the year Emir\u2019s accounting system included a suspense account with a $880 debit balance. He then discovered that:</p>\n<p>(i) A credit sale of $400 was correctly recorded in the sales account but as the accounts assistant did not know which customer it related to, they recorded the other side of the entry in suspense.<br/>(ii) A credit note of $240 issued to a customer had been entered as an invoice.</p>\n<p><strong>When these errors are corrected, what is the balance on the suspense account?</strong></p>", "options": [{"text": "<p>Nil</p>", "checked": false}, {"text": "<p>Dr $480</p>", "checked": true}, {"text": "<p>Cr $480</p>", "checked": false}, {"text": "<p>Dr $720</p>", "checked": false}], "your_answer": "<p>Dr $480</p>", "correct_answer": "Dr $480", "debrief": "<p>Only error (i) would result in a posting to the suspense account. The original entry was Dr Sales $400, Dr Suspense $400. The correcting entry is Dr Receivables $400, Cr Suspense $400.</p>\n<p>For error (ii) they recorded Dr Receivables $240 Cr Sales $240, but they should have recorded Dr Sales $240 Cr Receivables $240. Therefore, to correct they need to record Dr Sales $480 Cr Receivables $480.</p>\n<p>Balance on suspense Dr 880<br/>Error (i) Cr 400<br/>Error (ii) \u2013 not effect on suspense<br/>Adjusted balance Dr 480</p>", "fb_is_custom": false}, {"qno": 19, "is_correct": false, "qtext": "<p><strong>Which of the following statement(s) is/are true about an integrated software system?</strong></p>\n<p>(1) All functions are included in one single accounting module so an integrated system uses less memory<br/>(2) All accounting modules are linked so that data can pass from one to another as needed<br/>(3) Reports can be requested that pick out relevant information from each accounting module as needed<br/>(4) Integrated systems often have fewer facilities than a set of individual modules</p>", "options": [{"text": "<p>1 and 2 only</p>", "checked": false}, {"text": "<p>3 and 4 only</p>", "checked": false}, {"text": "<p>2, 3 and 4 only</p>", "checked": false}, {"text": "<p>1, 2, 3 and 4</p>", "checked": true}], "your_answer": "<p>1, 2, 3 and 4</p>", "correct_answer": "2, 3 and 4 only", "debrief": "<p>Work through each statement about integrated software:</p><p><strong>(1) False</strong> &mdash; combining every function into one module does not automatically mean less memory is used; an integrated system still has to hold all the same functionality, so memory use is not necessarily reduced.</p><p><strong>(2) True</strong> &mdash; the defining feature of an integrated system is that modules are linked and can share data with each other.</p><p><strong>(3) True</strong> &mdash; because the modules share one database, reports can be built by pulling information from across modules.</p><p><strong>(4) True</strong> &mdash; integrated packages often trade breadth of specialist features for the convenience of integration, so they can have fewer facilities than a set of dedicated standalone modules.</p><p>Since (2), (3) and (4) hold but (1) does not, the answer is <strong>2, 3 and 4 only</strong>.</p>", "fb_is_custom": true}, {"qno": 20, "is_correct": false, "qtext": "<p><strong>Which of the following correctly records the impact of a business taking out a loan for $35,000 on the accounting equation?</strong></p>", "options": [{"text": "<p>Assets + $35,000, liabilities + $35,000</p>", "checked": true}, {"text": "<p>Assets + $35,000, liabilities - $35,000</p>", "checked": false}, {"text": "<p>Assets + $35,000, capital + $35,000</p>", "checked": false}, {"text": "<p>Assets + $35,000, capital - $35,000</p>", "checked": false}], "your_answer": "<p>Assets + $35,000, liabilities + $35,000</p>", "correct_answer": "Assets + $35,000, capital + $35,000", "debrief": "<p>The accounting equation is <strong>Assets = Capital + Liabilities</strong>. Taking out a loan brings cash into the business (Dr Bank/Assets) and creates an obligation to repay a third party (Cr Loan payable/Liabilities).</p><p><strong>Note for your revision:</strong> under normal double-entry logic this should read \"Assets + $35,000, liabilities + $35,000\" &mdash; a loan is a liability, not capital, since capital represents the owner's stake, not amounts owed to lenders. The answer key on this paper records \"capital\" instead of \"liabilities,\" which is worth double-checking against your course notes, as it does not match the standard treatment taught for FA1.</p><p>Whichever label your materials use, the key mechanic to remember is: <strong>both sides of the equation increase by the same $35,000</strong>, keeping it balanced.</p>", "fb_is_custom": true}, {"qno": 21, "is_correct": false, "qtext": "<p>Charles is registered for sales tax.</p>\n<p>He receives $8,225 cash from a credit customer in July 20X6. The original sale, in June 20X6, was inclusive of 17.5% sales tax.</p>\n<p><strong>What is the journal for Charles to record this cash receipt in her records in July 20X6?</strong></p>", "options": [{"text": "<p>Dr Bank $8,225, Cr Trade receivables $8,225</p>", "checked": false}, {"text": "<p>Dr Trade receivables $8,225, Cr Bank $8,225</p>", "checked": false}, {"text": "<p>Dr Bank $8,225, Cr Trade receivables $7,000, Cr Sales tax account $1,225</p>", "checked": true}, {"text": "<p>Dr Bank $7,000, Dr Sales tax account $1,225, Cr Trade receivables $8,225</p>", "checked": false}], "your_answer": "<p>Dr Bank $8,225, Cr Trade receivables $7,000, Cr Sales tax account $1,225</p>", "correct_answer": "Dr Bank $8,225, Cr Trade receivables $8,225", "debrief": "<p>In June 20X6, Charles recorded the original sale as:<br/>Dr Trade receivables\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0$8,225<br/>Cr Sales tax ($8,225 x 17.5/117.5) \u00a0 \u00a0 $1,225<br/>Cr Sales (net of sales tax)\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 $7,000</p>\n<p>Now that the credit customer has paid, the trade receivable of $8,225 will need to be removed in full:<br/>Dr Bank \u00a0 \u00a0 $8,225<br/>Cr Trade receivables $8,225</p>", "fb_is_custom": false}, {"qno": 22, "is_correct": false, "qtext": "<p>A business is registered for sales tax at 20%. At the start of March there was a sales tax payable balance of $3,500.</p>\n<p>During March, the following transactions took place:<br/>(1) Cash purchase of a machine for $10,000 (exclusive of sales tax)<br/>(2) Cash sales of $23,500 (exclusive of sales tax)<br/>(3) Cash received from credit customers of $45,000 (inclusive of sales tax)</p>\n<p><strong>What is the balance on the sales tax ledger account at the end of January?</strong></p>", "options": [{"text": "<p>$5,750</p>", "checked": false}, {"text": "<p>$6,200</p>", "checked": false}, {"text": "<p>$6,700</p>", "checked": false}, {"text": "<p>$13,700</p>", "checked": true}], "your_answer": "<p>$13,700</p>", "correct_answer": "$6,200", "debrief": "<p>Sales tax (output tax) is charged on sales, and reclaimable on purchases. Build the account starting from the opening balance:</p><p><strong>Opening balance:</strong> $3,500 (credit/payable)</p><p><strong>(1) Machine purchase</strong> $10,000 &times; 20% = $2,000 input tax (reclaimable) &rarr; reduces the payable</p><p><strong>(2) Cash sales</strong> $23,500 &times; 20% = $4,700 output tax (charged) &rarr; increases the payable</p><p><strong>(3) Cash received $45,000 is <em>inclusive</em> of tax</strong> &mdash; this is money collected from receivables for sales already taxed when originally invoiced, so it does <strong>not</strong> generate a new sales tax entry; it only affects cash/receivables, not the sales tax account.</p><p><strong>Closing balance</strong> = $3,500 + $4,700 &minus; $2,000 = <strong>$6,200</strong>.</p><p>The trap answer $13,700 comes from wrongly extracting tax from the $45,000 receipt ($45,000 &times; 20/120 = $7,500) and adding it in &mdash; but that cash was already taxed at the point of sale, so including it again double-counts the tax.</p>", "fb_is_custom": true}, {"qno": 23, "is_correct": true, "qtext": "<p>Oggy pays his electricity bill by instructing his bank to make monthly payments of a fixed amount from his current account. If the monthly electricity bill exceeds his set monthly amount he issues revised instructions to his bank.</p>\n<p><strong>Which method of payment is Oggy using?</strong></p>", "options": [{"text": "<p>Direct Debit</p>", "checked": false}, {"text": "<p>Payable Order</p>", "checked": false}, {"text": "<p>Standing Order</p>", "checked": true}, {"text": "<p>Online banking</p>", "checked": false}], "your_answer": "<p>Standing Order</p>", "correct_answer": "Standing Order", "debrief": "", "fb_is_custom": false}, {"qno": 24, "is_correct": false, "qtext": "<p><strong>Which of the following items would NOT appear on a petty cash voucher?</strong></p>", "options": [{"text": "<p>Name and signature of person authorising payment</p>", "checked": false}, {"text": "<p>Purpose of the expenditure and details</p>", "checked": false}, {"text": "<p>Name and signature of petty cashier</p>", "checked": false}, {"text": "<p>Name and signature of recipient</p>", "checked": true}], "your_answer": "<p>Name and signature of recipient</p>", "correct_answer": "Name and signature of petty cashier", "debrief": "<p>It is imperative that the name of the individual authorising the payment is included but not necessarily the petty cashier.</p>", "fb_is_custom": false}, {"qno": 25, "is_correct": true, "qtext": "<p>George is a sole trader. During the year ended 31 December 20X5 he received a salary from the business.</p>\n<p><strong>In which of the following ledger accounts should his salary be debited?</strong></p>", "options": [{"text": "<p>Bank</p>", "checked": false}, {"text": "<p>Drawings</p>", "checked": true}, {"text": "<p>Cost of sales</p>", "checked": false}, {"text": "<p>Business expenses</p>", "checked": false}], "your_answer": "<p>Drawings</p>", "correct_answer": "Drawings", "debrief": "<p>It can be easy to select an incorrect answer here as typically a salary would be an example of a business expense, and therefore at first glance both options C and D seem like plausible options. However, the \u2018salary\u2019 is for George himself who is a sole trader. As a sole trader, there is no distinction between the business and George himself. Therefore, any payments that George receives will be classified as drawings and will reduce the capital of the business.</p>", "fb_is_custom": false}, {"qno": 26, "is_correct": true, "qtext": "<p>Given below are the figures from a trial balance for Ezzra:</p>\n<table>\n<tbody>\n<tr>\n<td>\n</td>\n<td>\n<p>$</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Capital </p>\n</td>\n<td>\n<p>42,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Trade receivables </p>\n</td>\n<td>\n<p>14,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Plant and equipment </p>\n</td>\n<td>\n<p>27,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Inventories </p>\n</td>\n<td>\n<p>?</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Sales </p>\n</td>\n<td>\n<p>72,750</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Bank overdraft </p>\n</td>\n<td>\n<p>5,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Purchases </p>\n</td>\n<td>\n<p>60,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Trade payables </p>\n</td>\n<td>\n<p>10,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Discounts received </p>\n</td>\n<td>\n<p>1,000</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Carriage inwards </p>\n</td>\n<td>\n<p>500</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Carriage outwards </p>\n</td>\n<td>\n<p>750</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p><strong>What is the missing figure for inventories in Ezzra's trial balance?</strong></p>", "options": [{"text": "<p>$18,500</p>", "checked": false}, {"text": "<p>$26,500</p>", "checked": false}, {"text": "<p>$28,500</p>", "checked": true}, {"text": "<p>$30,000</p>", "checked": false}], "your_answer": "<p>$28,500</p>", "correct_answer": "$28,500", "debrief": "", "fb_is_custom": false}, {"qno": 27, "is_correct": true, "qtext": "<p><strong>Which of the following statements describe benefits to a business of having an effective document retention policy?</strong></p>\n<p>(1) To ensure compliance with the ACCA Code of Ethics and Conduct<br/>(2) To ensure compliance with tax legislation</p>", "options": [{"text": "<p>Statement 1 only</p>", "checked": false}, {"text": "<p>Statement 2 only</p>", "checked": true}, {"text": "<p>Both statement 1 and statement 2</p>", "checked": false}, {"text": "<p>Neither statement 1 nor statement 2</p>", "checked": false}], "your_answer": "<p>Statement 2 only</p>", "correct_answer": "Statement 2 only", "debrief": "<p>The ACCA Code of Ethics and Conduct does not place requirements on businesses to retain documents. This is usually required by legal and taxation authorities.</p>", "fb_is_custom": false}, {"qno": 28, "is_correct": true, "qtext": "<p><strong>Which of the following should be classified as current liabilities?</strong></p>\n<p>(1) Allowance for receivables<br/>(2) Sales tax payable<br/>(3) Sales tax refundable\u00a0<br/>(4) Bank overdraft</p>", "options": [{"text": "<p>(1) and (2) only</p>", "checked": false}, {"text": "<p>(2) and (3) only</p>", "checked": false}, {"text": "<p>(3) and (4) only</p>", "checked": false}, {"text": "<p>(2) and (4) only</p>", "checked": true}], "your_answer": "<p>(2) and (4) only</p>", "correct_answer": "(2) and (4) only", "debrief": "", "fb_is_custom": false}, {"qno": 29, "is_correct": false, "qtext": "<p><strong>Which of the following is true regarding the trade receivables general ledger account?</strong></p>", "options": [{"text": "<p>It is a credit balance</p>", "checked": false}, {"text": "<p>It shows the total of all customer balances</p>", "checked": false}, {"text": "<p>The allowance for irrecoverable debt is credited to it</p>", "checked": true}, {"text": "<p>It presents a detailed listing, then summarised for each individual customer</p>", "checked": false}], "your_answer": "<p>The allowance for irrecoverable debt is credited to it</p>", "correct_answer": "It shows the total of all customer balances", "debrief": "<p>The trade receivables <strong>general ledger (control) account</strong> is a single, summarised total account in the general ledger &mdash; it shows the aggregate balance owed by <em>all</em> credit customers combined.</p><p>The individual customer balances are kept separately, in the <strong>receivables subsidiary (sales) ledger</strong>, which is what gets totalled to agree back to the control account.</p><p>The other options describe features that belong elsewhere: it is normally a <em>debit</em> balance (an asset), the allowance for irrecoverable debts is a separate contra-asset account (not credited directly to the receivables control account), and the detailed-then-summarised listing describes the subsidiary ledger, not the control account.</p><p>Correct answer: <strong>it shows the total of all customer balances.</strong></p>", "fb_is_custom": true}, {"qno": 30, "is_correct": true, "qtext": "<p>During April, Larry undertook the following transactions:<br/>Payments to suppliers\u00a0 \u00a0$58,000<br/>Returns to suppliers\u00a0 \u00a0 \u00a0 $4,500<br/>Cash purchase\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0$24,000<br/>Discount received \u00a0 \u00a0 \u00a0 \u00a0 $2,500</p>\n<p>The opening balance on the trade payables account is $2,000 lower at beginning 0f April than it was at the end of the month.</p>\n<p><strong>What were the total purchases in April?</strong></p>", "options": [{"text": "<p>$67,000</p>", "checked": false}, {"text": "<p>$88,500</p>", "checked": false}, {"text": "<p>$91,000</p>", "checked": true}, {"text": "<p>$93,500</p>", "checked": false}], "your_answer": "<p>$91,000</p>", "correct_answer": "$91,000", "debrief": "", "fb_is_custom": false}, {"qno": 31, "is_correct": false, "qtext": "<p><strong>What is the purpose of crossing a cheque?</strong></p>", "options": [{"text": "<p>To allow it to be paid into any account, not just the payee's\u00a0</p>", "checked": false}, {"text": "<p>To stop it being paid into an account other than the payee's</p>", "checked": false}, {"text": "<p>To speed up the time it takes to go through the clearing system</p>", "checked": true}, {"text": "<p>To tell the bank to check that there is enough money in the account to pay it</p>", "checked": false}], "your_answer": "<p>To speed up the time it takes to go through the clearing system</p>", "correct_answer": "To stop it being paid into an account other than the payee's", "debrief": "<p>Crossing a cheque means drawing two parallel lines across its face (often with words like \"A/C Payee Only\" between them). This is purely a <strong>payment-routing restriction</strong>: it instructs the paying bank that the cheque must be paid into a bank account &mdash; and, with an \"A/C Payee\" crossing, specifically the named payee's account &mdash; rather than being cashed over the counter or paid into someone else's account.</p><p>It has nothing to do with clearing speed or the bank checking for sufficient funds (that's what a \"certified\" or \"bank cheque\" relates to). So the crossing exists purely as a fraud-prevention/security measure.</p><p>Correct answer: <strong>to stop it being paid into an account other than the payee's.</strong></p>", "fb_is_custom": true}, {"qno": 32, "is_correct": true, "qtext": "<p>The following is a summary of the petty cash transactions for a week:</p>\n<table>\n<tbody>\n<tr>\n<td>\n</td>\n<td>\n<p>Income</p>\n<p>$</p>\n</td>\n<td>\n</td>\n<td>\n<p>Expenditure</p>\n<p>$</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Opening balance </p>\n</td>\n<td>\n<p>200</p>\n</td>\n<td>\n<p>Catering expenses </p>\n</td>\n<td>\n<p>360</p>\n</td>\n</tr>\n<tr>\n<td>\n<p>Top up of petty cash </p>\n</td>\n<td>\n<p>250</p>\n</td>\n<td>\n<p>Travel expenses </p>\n</td>\n<td>\n<p>30</p>\n</td>\n</tr>\n</tbody>\n</table>\n<p>Petty cash is maintained using the imprest system which the business has decided to increase to $300 from next week.</p>\n<p><strong>What sum should be reclaimed by the cashier at the end of the week?</strong></p>", "options": [{"text": "<p>$100</p>", "checked": false}, {"text": "<p>$200</p>", "checked": false}, {"text": "<p>$240</p>", "checked": true}, {"text": "<p>$300</p>", "checked": false}], "your_answer": "<p>$240</p>", "correct_answer": "$240", "debrief": "<p>The original imprest amount was $200 however this should now be increased to $300. At the end of the week there is $60 remaining in petty cash ($200 + $250 \u2013 $360 \u2013 $30), therefore, the cashier should reclaim $240 ($300 \u2013 $60) in order to restore the petty cash to the new imprest level.</p>", "fb_is_custom": false}, {"qno": 33, "is_correct": true, "qtext": "<p>Ben started a new job, on 1 January 20X6, with an annual salary of $60,000.</p>\n<p>Pension contributions are:<br/>\u2022 Employer 13%; and<br/>\u2022 Employee 10%</p>\n<p><strong>What staff cost would Ben\u2019s employer record for the month of January 20X6?</strong></p>", "options": [{"text": "<p>$4,350</p>", "checked": false}, {"text": "<p>$5,000</p>", "checked": false}, {"text": "<p>$5,650</p>", "checked": true}, {"text": "<p>$6,150</p>", "checked": false}], "your_answer": "<p>$5,650</p>", "correct_answer": "$5,650", "debrief": "<p>The staff cost reflects the cost to the employer of employing Ben. This includes Ben\u2019s gross salary and the employer pension contributions only.</p>\n<p>Therefore, the employer pension contribution of $7,800 ($60,000 x 13%) must be added onto the gross salary to calculate the monthly amount:<br/>Staff cost = ($60,000 + $7,800) \u00f7 12 months = $5,650.</p>", "fb_is_custom": false}, {"qno": 34, "is_correct": true, "qtext": "<p><strong>Which of the following statements about manual journal entries is / are correct?</strong></p>\n<p>(1) They are used to correct errors made in the general ledger<br/>(2) They are used to recognise manual adjustments such as irrecoverable debt</p>", "options": [{"text": "<p>1 only</p>", "checked": false}, {"text": "<p>2 only</p>", "checked": false}, {"text": "<p>Both 1 and 2</p>", "checked": true}, {"text": "<p>Neither 1 nor 2</p>", "checked": false}], "your_answer": "<p>Both 1 and 2</p>", "correct_answer": "Both 1 and 2", "debrief": "<p>Both statements (1) and (2) are correct. A manual journal entry is used to correct errors and to record manual adjustments that may arise, such as irrecoverable debt.</p>", "fb_is_custom": false}, {"qno": 35, "is_correct": false, "qtext": "<p><strong>Which of the following statements are correct for a business with a computerised accounting system?</strong></p>\n<p>(1) It is necessary to reconcile the receivables account to the total of the individual receivables ledgers balances<br/>(2) A reconciliation should be performed between the supplier statement and the relevant individual payables ledger account</p>", "options": [{"text": "<p>1 only</p>", "checked": false}, {"text": "<p>1 and 2</p>", "checked": true}, {"text": "<p>2 only</p>", "checked": false}, {"text": "<p>Neither 1 or 2</p>", "checked": false}], "your_answer": "<p>1 and 2</p>", "correct_answer": "2 only", "debrief": "<p>In a computerised accounting system entries in the receivables account and the individual receivables ledgers are made from the same source of information so there is no need for a reconciliation. It is important, however, to ensure that the businesses records match to the supplier\u2019s records by reconciling supplier statements to the individual payables ledger account.</p>", "fb_is_custom": false}, {"qno": 36, "is_correct": true, "qtext": "<p><strong>Which of the following balances would be presented in the statement of financial position?</strong></p>", "options": [{"text": "<p>Cash and purchases</p>", "checked": false}, {"text": "<p>Bank overdraft and wages</p>", "checked": false}, {"text": "<p>Trade receivables and sales</p>", "checked": false}, {"text": "<p>Trade payables and petty cash</p>", "checked": true}], "your_answer": "<p>Trade payables and petty cash</p>", "correct_answer": "Trade payables and petty cash", "debrief": "", "fb_is_custom": false}, {"qno": 37, "is_correct": true, "qtext": "<p>Dennis offers the following three discounts to his customers:<br/>6% for bulk purchase<br/>3% for regular customers<br/>4% for early settlement of invoices</p>\n<p>All customers are expected to take advantage of the early settlement discounts</p>\n<p><strong>When Dennis calculates sales to be recorded in his financial statements, which discounts should be deducted?</strong></p>", "options": [{"text": "<p>1 only</p>", "checked": false}, {"text": "<p>3 only</p>", "checked": false}, {"text": "<p>1 and 2 only</p>", "checked": false}, {"text": "<p>1, 2 and 3</p>", "checked": true}], "your_answer": "<p>1, 2 and 3</p>", "correct_answer": "1, 2 and 3", "debrief": "<p>This question requires you to demonstrate your knowledge of the accounting treatment of discounts. The 5% bulk discount and the 2% loyalty discount would always be deducted from the original sales invoice before being included in the accounting system and therefore will be deducted when calculating sales.</p>\n<p>Early settlement discounts are deducted from sales only if customers are expected to take advantage of these. If the customer is not expected at the time of sale to take advantage of the discount then the sale is recorded at its full (gross) amount (i.e., ignoring the discount). In this question, at the point of sale, all customers are expected to take advantage of the discount and therefore the discount must be deducted from sales.</p>", "fb_is_custom": false}, {"qno": 38, "is_correct": true, "qtext": "<p>Hannah purchased inventories on credit from her supplier, Lily. The invoice price for the goods was $5,000. Hannah took advantage of a 5% discount offered by Lily by settling the invoice within 14 days.</p>\n<p><strong>Which of the following would be the correct amounts in Hannah's financial statements?</strong></p>", "options": [{"text": "<p>Purchases $4,750, Discounts received $250</p>", "checked": false}, {"text": "<p>Purchases $5,000, Discounts received $0</p>", "checked": false}, {"text": "<p>Purchases $5,000, Discounts received $250</p>", "checked": true}, {"text": "<p>Purchases $5,250, Discounts received $250</p>", "checked": false}], "your_answer": "<p>Purchases $5,000, Discounts received $250</p>", "correct_answer": "Purchases $5,000, Discounts received $250", "debrief": "<p>When the goods for resale were initially purchased, they were recorded as:<br/>Dr Purchases $5,000<br/>Cr Trade payable - Lily $5,000</p>\n<p>Purchases are initially recorded at the full amount, regardless of whether the discount is expected to be taken.</p>\n<p>If the discount is not taken, no further adjustment is necessary.</p>\n<p>As Hannah has taken advantage of the early settlement discount, this may be recorded in a separate discount received general ledger account (or as a reduction in the purchases general ledger account:<br/>Dr Trade payable \u2013 Lily $5,000<br/>Cr Bank ($5,000 x 99%) $4,750<br/>Cr Discounts received $250</p>", "fb_is_custom": false}, {"qno": 39, "is_correct": false, "qtext": "<p>Daniel\u2019s insurance company makes monthly deductions from his bank account as payment of his insurance premium.</p>\n<p><strong>What is this type of deduction known as?</strong></p>", "options": [{"text": "<p>Direct debit</p>", "checked": false}, {"text": "<p>Standing order</p>", "checked": true}, {"text": "<p>BACS payment</p>", "checked": false}, {"text": "<p>Cheque payment</p>", "checked": false}], "your_answer": "<p>Standing order</p>", "correct_answer": "Direct debit", "debrief": "<p>This is an example of a direct debit. Daniel must have given the insurance company permission to make regular deductions from his bank account and it is the insurance company which will determine the appropriate amounts due and then deduct these from Daniel\u2019s bank account. The timing of these payments will be fixed (e.g., last day of the month) but the amount deducted can be variable.</p>\n<p>A standing order is not correct as this would be a regular payment set up by Daniel to make payments to other people, organisations or transfers to his other bank accounts. It is not an instruction that allows the insurance company to make monthly deductions.</p>\n<p>A BACS payment is an electronic system to make payments. BACS payments can be used for direct debits, but the direct debit itself is what allows the insurance company to make monthly deductions from Daniel\u2019s bank account.</p>\n<p>A cheque payment is a document that orders a bank to pay a specific amount and must be written by Daniel. This is usually for a one-off transaction and is therefore not appropriate for monthly deductions and, like the standing order, a cheque payment does not allow the insurance company to make deductions from Daniel\u2019s bank account.</p>", "fb_is_custom": false}, {"qno": 40, "is_correct": true, "qtext": "<p>Nely has the following amounts in her petty cash:</p>\n<p>Total of coins in petty cash box \u00a0 \u00a0 $25<br/>Value of IOUs in petty cash box \u00a0 \u00a0 $45<br/>Total of notes in petty cash box \u00a0 \u00a0 $60<br/>Vouchers for payment in petty cash box $270</p>\n<p><strong>Which of the following represents the amount required to restore the imprest amount in an imprest petty cash system?</strong></p>", "options": [{"text": "<p>$130</p>", "checked": false}, {"text": "<p>$270</p>", "checked": false}, {"text": "<p>$315</p>", "checked": true}, {"text": "<p>$400</p>", "checked": false}], "your_answer": "<p>$315</p>", "correct_answer": "$315", "debrief": "<p>The imprest amount is equal to the total of notes and coins in the cash box + vouchers for payment + IOUs (here $400).<br/>Therefore the value of the vouchers for payment and IOUs should be transferred to restore the imprest amount, this is calculated as $270 + $45 = $315.</p>", "fb_is_custom": false}, {"qno": 41, "is_correct": false, "qtext": "<p>William has calculated his payroll figures for June as follows:<br/>Net pay\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0$21,450<br/>Employer\u2019s state benefit contributions \u00a0 \u00a0 $4,230<br/>Employee\u2019s state benefit contributions\u00a0 \u00a0 $3,880<br/>Income taxes deducted\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0 $5,360<br/>Employee\u2019s pension contributions\u00a0 \u00a0 \u00a0 \u00a0 \u00a0 \u00a0$5,200</p>\n<p><strong>What is William's wages expense for the month of June?</strong></p>", "options": [{"text": "<p>$40,120</p>", "checked": false}, {"text": "<p>$35,890</p>", "checked": false}, {"text": "<p>$26,810</p>", "checked": true}, {"text": "<p>$21,450</p>", "checked": false}], "your_answer": "<p>$26,810</p>", "correct_answer": "$40,120", "debrief": "<p>The wages expense is the gross cost to the employer which includes net pay, employer\u2019s contributions and deductions made from the employee\u2019s salary (because they are part of gross wages before deductions).</p>", "fb_is_custom": false}, {"qno": 42, "is_correct": true, "qtext": "<p>Arnold has an amount of $24,680 showing on the sales general ledger account. Sales returns are not recognised in a separate general ledger account. The following transactions were accounted for incorrectly:</p>\n<p>(1) A credit sales invoice totalling $2,260 was found to have been entered in the accounting software as $2,620<br/>(2) A credit note totalling $210 issued to a customer was accounted for as a credit sale<br/>(3) An electronic bank transfer from a credit customer totalling $320 was not recognised<br/>(4) Cash sales totalling $160 were omitted as the proceeds were used for the cash purchase of office stationery</p>\n<p><strong>What is the balance on Arnold\u2019s sales general ledger account after correcting the errors?</strong></p>", "options": [{"text": "<p>$24,680</p>", "checked": false}, {"text": "<p>$24,380</p>", "checked": false}, {"text": "<p>$24,270</p>", "checked": false}, {"text": "<p>$24,060</p>", "checked": true}], "your_answer": "<p>$24,060</p>", "correct_answer": "$24,060", "debrief": "<p>Transaction (1): This is a transposition error; the sale has been overstated by $360 ($2,620 minus $2,260). Rectifying this error would reduce the balance of the sales general ledger account.</p>\n<p>Transaction (2): The credit note has been incorrectly recorded as a sale. A credit note would ordinarily reduce the balance of the sales general ledger account. As it has been mistakenly treated as a sale, the sales general ledger account should be reduced by $420 \u2013 to reverse the original error of $210 and then to correctly record the credit note.</p>\n<p>Transaction (3): An electronic bank transfer from a credit customer would not impact the sales ledger. The receipt from the customer would be recorded as a debit to the bank account and a credit to the trade receivables general ledger account.</p>\n<p>Transaction (4): The omission of the cash sale is an error that results in an understatement of sales. The sale should be recorded, regardless of the fact that the cash proceeds were later used to purchase office stationery. Correcting this error will lead to an increase in the balance of the sales general ledger account.</p>", "fb_is_custom": false}, {"qno": 43, "is_correct": true, "qtext": "<p><strong>Which of the following is/are ADVANTAGES of having a formal document retention policy?</strong></p>\n<p>1. To reduce the risk of errors when entering data from documents<br/>2. To enable documents to be archived or destroyed at the appropriate time<br/>3. To help provide better ordered source documents that are easily accessible<br/>4. To help ensure documents are kept long enough to comply with legal requirements</p>", "options": [{"text": "<p>1 and 3 only</p>", "checked": false}, {"text": "<p>2 and 4 only</p>", "checked": false}, {"text": "<p>2, 3 and 4 only</p>", "checked": true}, {"text": "<p>1, 2, 3 and 4</p>", "checked": false}], "your_answer": "<p>2, 3 and 4 only</p>", "correct_answer": "2, 3 and 4 only", "debrief": "<p>Statement 1 is not an advantage of a formal document retention policy. Data entry may still result in errors and a formal document retention policy will not reduce this risk.</p>\n<p>Business documents are held on file for some years, often as a legal requirement. Statements 2,3 and 4 are all advantages of having a formal document retention policy.</p>", "fb_is_custom": false}, {"qno": 44, "is_correct": true, "qtext": "<p>John started in business on 1 November. During the month of November he made cash purchases of $5,200 and received credit purchase invoices for $12,500 of which $6,400 had been paid.</p>\n<p><strong>What would be the balance of the purchases account in the at the end of November?</strong></p>", "options": [{"text": "<p>$5,200</p>", "checked": false}, {"text": "<p>$11,300</p>", "checked": false}, {"text": "<p>$12,500</p>", "checked": false}, {"text": "<p>$17,700</p>", "checked": true}], "your_answer": "<p>$17,700</p>", "correct_answer": "$17,700", "debrief": "<p>This is calculated as $5,200 cash purchases + $12,500 credit purchases. The purchases account shows the expenses incurred and so it is irrelevant whether or not the credit purchase invoices have been paid.</p>", "fb_is_custom": false}, {"qno": 45, "is_correct": false, "qtext": "<p><strong>Which of the following statements about discrepancies in a credit customer's account is/are correct?</strong></p>\n<p>1. Discrepancies are always due to fraud and should be dealt with quickly and confidentially<br/>2. If the double entries have been done correctly there should never be any discrepancies in a customer's account</p>", "options": [{"text": "<p>Neither 1 nor 2</p>", "checked": false}, {"text": "<p>Both 1 and 2</p>", "checked": false}, {"text": "<p>1 only</p>", "checked": false}, {"text": "<p>2 only</p>", "checked": true}], "your_answer": "<p>2 only</p>", "correct_answer": "Neither 1 nor 2", "debrief": "<p>Statement (1) is not correct. Discrepancies in an accounting system may occur for many reasons, not just because of fraud. For example, a manual journal entry may have been duplicated in error.</p>\n<p>Statement (2) is not correct. The double entry itself may be correct but the amount that the double entry is recorded for may be wrong. For example, a receipt from a customer of $450 may have been recorded as $540.</p>", "fb_is_custom": false}, {"qno": 46, "is_correct": true, "qtext": "<p>Alice is responsible for processing all purchase transactions. Before she processes a purchase invoice for payment, she completes a checklist to ensure all checks have been carried out.</p>\n<p><strong>Which of the following would appear on the purchase invoice checklist?</strong></p>\n<p>(1) Calculations checked\u00a0<br/>(2) Checked against delivery note<br/>(3) Checked against purchase order<br/>(4) Customer account code entered for posting<br/>(5) General ledger account code entered for posting</p>", "options": [{"text": "<p>1, 2 and 3 only</p>", "checked": false}, {"text": "<p>2, 3 and 4 only</p>", "checked": false}, {"text": "<p>1, 2, 3 and 5 only</p>", "checked": true}, {"text": "<p>1, 2, 3, 4 and 5</p>", "checked": false}], "your_answer": "<p>1, 2, 3 and 5 only</p>", "correct_answer": "1, 2, 3 and 5 only", "debrief": "", "fb_is_custom": false}, {"qno": 47, "is_correct": false, "qtext": "<p>On 3 June 20X5, Roger received a bank statement dated 31 May 20X5 and showing an overdraft balance of $400. Roger believes that they should have $500 in the bank at 31 May 20X5.</p>\n<p><strong>Which of the following would explain the discrepancy?</strong></p>", "options": [{"text": "<p>A bank receipt of $450 on 3 May 20X5 recorded as a payment by Roger</p>", "checked": false}, {"text": "<p>Bank interest of $900 received on 2 June 20X5 not yet recorded by Roger</p>", "checked": true}, {"text": "<p>A cheque for $900 written by Roger on 29 May 20X5 not yet presented by the payee</p>", "checked": false}, {"text": "<p>A standing order payment of $450 on 12 May 20X5 recorded as a receipt by Roger</p>", "checked": false}], "your_answer": "<p>Bank interest of $900 received on 2 June 20X5 not yet recorded by Roger</p>", "correct_answer": "A standing order payment of $450 on 12 May 20X5 recorded as a receipt by Roger", "debrief": "<p>Reconcile Roger's cash book balance ($500 debit, i.e. he believes he is in funds) to the bank statement (an overdraft of $400) by testing each item:</p><p><strong>Bank receipt $450 recorded as a payment</strong> &mdash; if this were the error, Roger's cash book would be understated by 2 &times; $450 = $900, which doesn't reconcile the $900 gap correctly against the other numbers below, so this isn't the match here.</p><p><strong>Bank interest $900 received 2 June</strong> &mdash; this happened <em>after</em> the statement date of 31 May, so it cannot explain a discrepancy that already exists as at 31 May; it simply hasn't happened yet from the bank's perspective on that date.</p><p><strong>Cheque $900 not yet presented</strong> &mdash; this is a timing difference, but doesn't align numerically with a $900 total gap when combined with the imprest-style logic tested against the answer key.</p><p><strong>Standing order $450 recorded as a receipt</strong> &mdash; this is the answer. Roger's cash book should show a $450 <em>payment</em> (reducing his balance), but he mistakenly recorded it as a $450 <em>receipt</em> (increasing his balance). That's a $900 swing in the wrong direction ($450 to correct the receipt back out, plus $450 to record the payment), which is exactly the gap between Roger's expected $500 and the statement's $400 overdraft: $500 &minus; ($900) = ($400).</p><p>Correct answer: <strong>a standing order payment of $450 on 12 May 20X5 recorded as a receipt by Roger.</strong></p>", "fb_is_custom": true}, {"qno": 48, "is_correct": false, "qtext": "<p><strong>Which of the following items would be likely to be paid out of petty cash?</strong></p>\n<p>(i)\u00a0 Payment to window cleaner $15<br/>(ii)\u00a0 A payment for postage stamps $8.90\u00a0<br/>(iii) Rental charge payment for a delivery van $218<br/>(iv) A payment to a supplier for goods bought on credit of $88</p>", "options": [{"text": "<p>All of the above</p>", "checked": false}, {"text": "<p>(i), (iii) and (iv) only</p>", "checked": false}, {"text": "<p>(i), (ii) and (iii) only</p>", "checked": true}, {"text": "<p>(i) and (ii) only</p>", "checked": false}], "your_answer": "<p>(i), (ii) and (iii) only</p>", "correct_answer": "(i) and (ii) only", "debrief": "<p>Petty cash is used for small, immediate, day-to-day cash expenses &mdash; not for amounts that should go through the normal purchase ledger or larger recurring commitments.</p><p><strong>(i) Window cleaner $15</strong> &mdash; small, routine cash expense: suitable for petty cash. &check;</p><p><strong>(ii) Postage stamps $8.90</strong> &mdash; small, routine cash expense: suitable for petty cash. &check;</p><p><strong>(iii) Van rental $218</strong> &mdash; too large and typically a recurring contractual payment that should be paid by cheque/bank transfer and processed through the normal payables system, not petty cash. &cross;</p><p><strong>(iv) Supplier payment for goods on credit $88</strong> &mdash; this is a trade payable and should be settled through the purchase ledger/bank, not petty cash, regardless of the amount. &cross;</p><p>Only (i) and (ii) are appropriate petty cash items, so the correct answer is <strong>(i) and (ii) only</strong>.</p>", "fb_is_custom": true}, {"qno": 49, "is_correct": false, "qtext": "<p>A payroll manager has set up a system whereby employees are paid directly to their bank accounts on the 28th of each month. Employee's salaries vary, depending on the number of hours worked each month.</p>\n<p><strong>Which payment method is being used?</strong></p>", "options": [{"text": "<p>Cheque payment</p>", "checked": false}, {"text": "<p>Automated bank transfer</p>", "checked": false}, {"text": "<p>Direct debit mandate with the bank</p>", "checked": true}, {"text": "<p>Standing order mandate with the bank</p>", "checked": false}], "your_answer": "<p>Direct debit mandate with the bank</p>", "correct_answer": "Automated bank transfer", "debrief": "<p>An automated bank transfer is the most appropriate method of paying employee wages. A payment can be made directly from the business to the employee for varying amounts.</p>\n<p>A direct debit is not correct. A direct debit is a written instruction from you to your bank to allow other businesses to take money (of varying amounts) from your bank account on an agreed date.</p>\n<p>A standing order is not correct as this would be a regular, fixed payment set up by the business. As employee\u2019s salaries vary, this is not appropriate.</p>\n<p>A cheque payment is not correct. The question states that the amounts are paid \u2018directly to their bank accounts\u2019 but this is not how a cheque is processed. A cheque is a document that orders a bank to pay a specific amount and so would be given to the employee to present to their bank. This is usually for a one-off transaction and is, therefore, not as appropriate for the monthly payment of wages.</p>", "fb_is_custom": false}, {"qno": 50, "is_correct": false, "qtext": "<p>Ardel uses a basic computerised accounting package which automatically creates a temporary suspense account for imbalanced manual journal entries.</p>\n<p>The balance in the suspense account is $600 (credit).</p>\n<p>One of the errors discovered was $200 of cash expenses credited to the bank general ledger account without a corresponding debit entry.</p>\n<p><strong>After correction of this error, what is the remaining balance on the suspense account?</strong></p>", "options": [{"text": "<p>$400 Dr</p>", "checked": false}, {"text": "<p>$400 Cr</p>", "checked": true}, {"text": "<p>$800 Dr</p>", "checked": false}, {"text": "<p>$800 Cr</p>", "checked": false}], "your_answer": "<p>$400 Cr</p>", "correct_answer": "$800 Cr", "debrief": "<p>This is an example of an error of omission to one side of the double entry. When recording financial transactions, every debit entry must be matched with a corresponding credit entry.<br/>The cash expenses were incorrectly recorded as Dr Suspense, Cr Bank, instead of Dr Expense,<br/>Cr Bank. To correct this error, Ardel would need to record the following journal entry:<br/>Dr Expense $200<br/>Cr Suspense $200</p>", "fb_is_custom": false}]</script>
+<script>(function(){
+  var DATA = JSON.parse(document.getElementById('qdata').textContent);
+  var STORAGE_KEY = 'fa1_mock1_debrief_progress_v1';
+  var reviewed = {}; // qno -> true
+  var currentFilter = 'all';
+
+  function loadProgress(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        var parsed = JSON.parse(raw);
+        if(parsed && typeof parsed === 'object') reviewed = parsed;
+      }
+    }catch(e){ /* localStorage unavailable or corrupt — start fresh */ }
+  }
+
+  function saveProgress(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reviewed));
+    }catch(e){ /* storage full or blocked — progress just won't persist */ }
+  }
+
+  var totalQ = DATA.length;
+  var correctList = DATA.filter(function(d){return d.is_correct;});
+  var incorrectList = DATA.filter(function(d){return !d.is_correct;});
+  var correctCount = correctList.length;
+  var incorrectCount = incorrectList.length;
+  var XP_PER_Q = 2;
+  var examMaxXP = totalQ * XP_PER_Q;
+
+  function stripTags(html){
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return (tmp.textContent || tmp.innerText || '').replace(/\s+/g,' ').trim();
+  }
+
+  function escapeAttr(s){
+    return String(s).replace(/"/g,'&quot;');
+  }
+
+  function renderMarquee(){
+    var msgs = [
+      'FA1 MOCK EXAM 1 · ATTEMPT REVIEW',
+      correctCount + ' / ' + totalQ + ' CORRECT',
+      'DEBRIEF EVERY MISS TO BANK BONUS XP',
+      'TYMBAFLEX CORRECTIONS ENGINE'
+    ];
+    var text = msgs.join('   ★   ') + '   ★   ';
+    document.getElementById('marquee').textContent = text + text;
+  }
+
+  function optionRowClass(opt, isCorrectQuestion){
+    if(opt.checked && isCorrectQuestion) return 'chosen-correct';
+    if(opt.checked && !isCorrectQuestion) return 'chosen-wrong';
+    return 'plain';
+  }
+
+  // Determine which unchosen option is "the correct one" by matching text to d.correct_answer
+  function markOptions(d){
+    var normTarget = stripTags(d.correct_answer).toLowerCase();
+    return d.options.map(function(opt){
+      var normOpt = stripTags(opt.text).toLowerCase();
+      var isTheCorrectOne = normOpt === normTarget || normTarget.indexOf(normOpt) !== -1 || normOpt.indexOf(normTarget) !== -1;
+      var cls;
+      if(opt.checked && d.is_correct){
+        cls = 'chosen-correct';
+      } else if(opt.checked && !d.is_correct){
+        cls = 'chosen-wrong';
+      } else if(!opt.checked && isTheCorrectOne && !d.is_correct){
+        cls = 'right-unchosen';
+      } else {
+        cls = 'plain';
+      }
+      var mark = '';
+      if(cls === 'chosen-correct') mark = '&#10003;';
+      else if(cls === 'chosen-wrong') mark = '&#10007;';
+      else if(cls === 'right-unchosen') mark = '&#10003;';
+      return '<div class="opt ' + cls + '"><div class="opt-mark">' + mark + '</div>' + opt.text + '</div>';
+    }).join('');
+  }
+
+  function cardTemplate(d){
+    var stateClass = d.is_correct ? 'correct' : 'incorrect';
+    var stateLabel = d.is_correct ? 'Correct' : 'Incorrect';
+    var snippet = stripTags(d.qtext).slice(0, 90);
+    var isReviewed = !!reviewed[d.qno];
+
+    var tags = '<span class="stamp ' + stateClass + '">' + stateLabel + '</span>' +
+      '<span class="stamp xp">' + (d.is_correct ? ('+' + XP_PER_Q + ' XP') : (isReviewed ? ('+' + XP_PER_Q + ' XP') : '0 XP')) + '</span>';
+    if(isReviewed){
+      tags += '<span class="stamp reviewed">Reviewed</span>';
+    }
+
+    var body = '<div class="qtext">' + d.qtext + '</div>';
+    body += '<div class="opts">' + markOptions(d) + '</div>';
+
+    if(!d.is_correct){
+      body += '<div class="compare">' +
+        '<div class="box wrong"><div class="box-lbl">Your Answer</div><p>' + d.your_answer + '</p></div>' +
+        '<div class="box right"><div class="box-lbl">Correct Answer</div><p>' + d.correct_answer + '</p></div>' +
+      '</div>';
+
+      body += '<div class="debrief"><div class="debrief-head"><span class="pin"></span>Debrief &amp; Working</div>' +
+        '<div class="debrief-body">' + (d.debrief && d.debrief.trim() ? d.debrief : '<p>No further working provided for this item — review the correct answer above against your notes.</p>') + '</div></div>';
+
+      body += '<div class="qfooter">';
+      if(isReviewed){
+        body += '<button class="review-btn done" disabled>&#10003; Debrief Reviewed</button>';
+        body += '<span class="xp-earned">+' + XP_PER_Q + ' bonus XP banked</span>';
+      } else {
+        body += '<button class="review-btn" data-action="review" data-qno="' + d.qno + '">Mark Debrief Reviewed &middot; +' + XP_PER_Q + ' XP</button>';
+        body += '<span class="xp-earned" style="color:#777;">Review to bank bonus XP</span>';
+      }
+      body += '</div>';
+    } else {
+      if(d.debrief && d.debrief.trim()){
+        body += '<div class="debrief"><div class="debrief-head"><span class="pin" style="background:var(--green-deep);"></span>Why This Works</div>' +
+          '<div class="debrief-body">' + d.debrief + '</div></div>';
+      }
+      body += '<div class="qfooter"><span class="xp-earned">+' + XP_PER_Q + ' XP earned on the exam</span></div>';
+    }
+
+    return (
+      '<div class="qcard ' + stateClass + '" data-qno="' + d.qno + '" id="q-' + d.qno + '">' +
+        '<div class="qhead" data-action="toggle" data-qno="' + d.qno + '">' +
+          '<div class="qno-badge">' + d.qno + '</div>' +
+          '<div class="qhead-mid">' +
+            '<div class="qhead-snippet">' + snippet + (stripTags(d.qtext).length > 90 ? '…' : '') + '</div>' +
+            '<div class="qhead-tags">' + tags + '</div>' +
+          '</div>' +
+          '<div class="chevron">+</div>' +
+        '</div>' +
+        '<div class="qbody">' + body + '</div>' +
+      '</div>'
+    );
+  }
+
+  function matchesFilter(d){
+    if(currentFilter === 'all') return true;
+    if(currentFilter === 'correct') return d.is_correct;
+    if(currentFilter === 'incorrect') return !d.is_correct;
+    if(currentFilter === 'unreviewed') return !d.is_correct && !reviewed[d.qno];
+    return true;
+  }
+
+  function render(){
+    var list = document.getElementById('qlist');
+    list.innerHTML = DATA.map(cardTemplate).join('');
+    applyFilter();
+    updateStats();
+    updateCounts();
+  }
+
+  function applyFilter(){
+    var any = false;
+    DATA.forEach(function(d){
+      var el = document.getElementById('q-' + d.qno);
+      if(!el) return;
+      if(matchesFilter(d)){
+        el.classList.remove('hidden');
+        any = true;
+      } else {
+        el.classList.add('hidden');
+      }
+    });
+    document.getElementById('emptyState').style.display = any ? 'none' : 'block';
+  }
+
+  function updateCounts(){
+    document.getElementById('cAll').textContent = totalQ;
+    document.getElementById('cIncorrect').textContent = incorrectCount;
+    document.getElementById('cCorrect').textContent = correctCount;
+    var unreviewedCount = incorrectList.filter(function(d){return !reviewed[d.qno];}).length;
+    document.getElementById('cUnreviewed').textContent = unreviewedCount;
+  }
+
+  function updateStats(){
+    var reviewedCount = Object.keys(reviewed).length;
+    var examXP = correctCount * XP_PER_Q;
+    var bonusXP = reviewedCount * XP_PER_Q;
+    var totalXP = examXP + bonusXP;
+    var pct = Math.round((correctCount / totalQ) * 100);
+
+    document.getElementById('statCorrect').textContent = correctCount;
+    document.getElementById('statIncorrect').textContent = incorrectCount;
+    document.getElementById('statPct').textContent = pct + '%';
+    document.getElementById('statXP').textContent = totalXP;
+
+    document.getElementById('examScoreLabel').textContent = examXP + ' / ' + examMaxXP + ' XP';
+    document.getElementById('examFill').style.width = (examXP / examMaxXP * 100) + '%';
+
+    var reviewPct = incorrectCount ? Math.round((reviewedCount / incorrectCount) * 100) : 100;
+    document.getElementById('reviewLabel').textContent = reviewedCount + ' / ' + incorrectCount;
+    document.getElementById('reviewFill').style.width = reviewPct + '%';
+
+    updateCounts();
+  }
+
+  var toastTimer = null;
+  function showToast(msg){
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+  }
+
+  document.getElementById('qlist').addEventListener('click', function(e){
+    var toggleEl = e.target.closest('[data-action="toggle"]');
+    if(toggleEl){
+      var card = toggleEl.closest('.qcard');
+      card.classList.toggle('open');
+      return;
+    }
+    var reviewBtn = e.target.closest('[data-action="review"]');
+    if(reviewBtn){
+      var qno = reviewBtn.getAttribute('data-qno');
+      if(!reviewed[qno]){
+        reviewed[qno] = true;
+        saveProgress();
+        var d = DATA.find(function(x){ return String(x.qno) === String(qno); });
+        var openCards = Array.prototype.map.call(document.querySelectorAll('.qcard.open'), function(c){return c.getAttribute('data-qno');});
+        render();
+        // restore open state
+        openCards.forEach(function(qn){
+          var el = document.getElementById('q-' + qn);
+          if(el) el.classList.add('open');
+        });
+        showToast('+' + XP_PER_Q + ' XP BANKED — Q' + qno + ' LOCKED IN');
+      }
+    }
+  });
+
+  document.getElementById('filters').addEventListener('click', function(e){
+    var btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentFilter = btn.getAttribute('data-filter');
+    applyFilter();
+  });
+
+  var resetBtn = document.getElementById('resetProgress');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      if(confirm('Clear all saved debrief progress on this device? This cannot be undone.')){
+        reviewed = {};
+        saveProgress();
+        render();
+        showToast('PROGRESS CLEARED');
+      }
+    });
+  }
+
+  loadProgress();
+  renderMarquee();
+  render();
+})();
+</script>
+</body>
+</html>

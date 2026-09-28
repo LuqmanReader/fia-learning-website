@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revision Hub · TYMBAFlex</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --ink:#111111;
+    --paper:#F4EEDD;
+    --red:#E63B2E;
+    --blue:#1D3FA0;
+    --yellow:#F5C518;
+    --grey:#777777;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:radial-gradient(circle, rgba(17,17,17,0.06) 1px, transparent 1px);
+    background-size:18px 18px;
+    color:var(--ink);
+    font-family:ui-monospace,"JetBrains Mono","Space Mono",Menlo,Consolas,monospace;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .stage{text-align:center;padding:32px;}
+  .mark{position:relative;width:64px;height:64px;margin:0 auto 22px;}
+  .mark-circle{position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--red);border:3px solid var(--ink);}
+  .mark-tri{position:absolute;left:22px;top:14px;width:0;height:0;border-left:19px solid transparent;border-right:19px solid transparent;border-bottom:32px solid var(--blue);}
+  .mark-square{position:absolute;left:36px;top:0;width:26px;height:26px;background:var(--yellow);border:3px solid var(--ink);}
+
+  h1{
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    text-transform:uppercase;
+    letter-spacing:-0.02em;
+    font-size:clamp(30px,7vw,52px);
+    line-height:0.95;
+    margin:0;
+  }
+  .subtitle{
+    font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--grey);
+    margin-top:12px;
+  }
+
+  .startbtn{
+    display:inline-block;
+    margin-top:34px;
+    font-family:"Arial Black","Helvetica Neue",Impact,sans-serif;
+    font-size:20px;
+    text-transform:uppercase;
+    letter-spacing:0.03em;
+    padding:18px 48px;
+    border:4px solid var(--ink);
+    background:var(--yellow);
+    color:var(--ink);
+    text-decoration:none;
+    box-shadow:7px 7px 0 0 var(--ink);
+    transition:transform .08s ease, box-shadow .08s ease;
+  }
+  .startbtn:hover{transform:translate(-2px,-2px);box-shadow:9px 9px 0 0 var(--ink);}
+  .startbtn:active{transform:translate(4px,4px);box-shadow:3px 3px 0 0 var(--ink);}
+
+  footer{
+    margin-top:40px;
+    font-size:10px;
+    color:var(--grey);
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="mark"><img src="logo.png" alt="logo" style="width:100%;height:100%;object-fit:contain;"></div>
+    <h1>Revision Hub</h1>
+    <div class="subtitle">Mock exam debriefs · TYMBAFlex</div>
+    <a class="startbtn" href="hub.html">Start</a>
+    <footer>Personal use only</footer>
+  </div>
+</body>
+</html>
